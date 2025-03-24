@@ -1,0 +1,36 @@
+.device-page {
+    /* Tus estilos para .device-page van aquí */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    font-family: 'Apple Chancery', cursive;
+
+  }
+  
+  .device-selector {
+    /* Tus estilos para .device-selector van aquí */
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+  }
+  
+  .device-selector label {
+    /* Tus estilos para el label dentro de .device-selector van aquí */
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .device-selector select {
+    /* Tus estilos para el select dentro de .device-selector van aquí */
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ccc;
+  }
+  

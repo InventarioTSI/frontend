@@ -1,0 +1,120 @@
+.device-form {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+}
+
+
+.form-fields {
+  display: flex;
+  justify-content: space-between;
+}
+
+.column {
+  flex-basis: 45%;
+  /* Ajusta este valor para cambiar el ancho de las columnas */
+  margin-right: 5%;
+  /* Añade un margen para separar las columnas */
+}
+
+.form-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.form-label {
+
+  /* Tus estilos para el label dentro de .form-field van aquí */
+  flex-basis: 40%;
+  /* Ajusta este valor según tus necesidades */
+  margin-right: 10px;
+}
+
+.form-input {
+  /* Tus estilos para el input dentro de .form-field van aquí */
+  flex-basis: 60%;
+  /* Ajusta este valor según tus necesidades */
+  border: 2px solid #000;
+  /* Añade un borde negro de 2px */
+  border-radius: 2px;
+  /* Añade bordes curvados */
+}
+
+.error-text {
+  color: red;
+  font-size: 0.875rem;
+}
+
+.form-buttons {
+  display: flex;
+  margin-left: 10px;
+  margin-right: -50px;
+}
+
+
+.cancel-button {
+  margin-right: 10px;
+  text-align: center;
+  border: 2px solid #ab1100;
+  background-color: #ff4b37;
+  color: #fff;
+}
+
+
+.submit-button {
+
+  text-align: center;
+  border: 2px solid #0bab00;
+  background-color: #63cc00;
+  color: #fff;
+}
+
+.print-button {
+  text-align: center;
+  border: 2px solid #0039ab;
+  background-color: #003cff;
+  color: #fff;
+}
+
+.cancel-button:hover {
+  background-color: #ab1100;
+}
+
+.submit-button:hover {
+  background-color: #0bab00;
+}
+
+.print-button:hover {
+  background-color: #0039ab;
+}
+
+.qr-section {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.div-ref {
+  color: black;
+}
+
+
+
+.error {
+  color: red;
+}
+
+.Link-cancel {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

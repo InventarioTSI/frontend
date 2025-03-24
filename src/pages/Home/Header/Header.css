@@ -1,0 +1,52 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-family: 'Apple Chancery', cursive;
+
+}
+
+.logo {
+    margin-top: 5px;
+    height: 50px;
+}
+
+
+.userIcon {
+    height: 50px;
+    margin-top: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* Estilos para el nombre de usuario */
+.username {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+}
+
+
+.logoutDiv {
+    position: absolute;
+
+    top: 70px;
+    right: 30px;
+
+}
+
+.buttonlogout {
+    align-items: center;
+    background-color: #ff7c7c;
+    border: 3px solid #ff3d3d;
+    border-radius: 5px;
+    padding: 5px;
+    height: 40px;
+    width: 130px;
+
+}
+
+.buttonlogout:hover {
+
+    border: 3px solid #550000;
+}

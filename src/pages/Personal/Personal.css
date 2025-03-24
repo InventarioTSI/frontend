@@ -1,0 +1,241 @@
+.personal-container {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.left-section {
+    padding-left: 20px;
+    padding-right: 10px;
+    width: 50%;
+}
+
+.right-section {
+    padding-right: 20px;
+    padding-left: 10px;
+    width: 50%;
+}
+
+.personal-select {
+    border: 2px solid black;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.personal-option {
+    padding: 10px;
+}
+
+.main-container {
+    font-family: 'Apple Chancery', cursive;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+
+
+.form-personal {
+    width: 65%;
+    height: 200px;
+    padding-top: 10px;
+    text-align: right;
+}
+
+.label-personal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
+    font-size: 22px;
+}
+
+.input-personal {
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin-left: 10px;
+    margin-top: 5px;
+    padding-left: 5px;
+}
+
+.input-personal[readonly] {
+    background-color: #D3D3D3;
+  }
+  
+
+.select-personal {
+    align-items: center;
+    border: 2px solid black;
+    width: 326px;
+    border-radius: 5px;
+    margin-left: 10px;
+    margin-top: 5px;
+    padding-left: 5px;
+}
+
+.div-botones-personal {
+    display: flex;
+}
+
+.modificar-personal {
+    width: 200px;
+    height: 40px;
+    border: 2px solid #041E42;
+    border-radius: 2px;
+    background-color: #2a72d6;
+    color: white;
+}
+
+.modificar-personal:hover {
+
+    background-color: #041E42;
+
+}
+
+.agregar-personal {
+    width: 200px;
+    height: 40px;
+    border: 2px solid #518b03;
+    border-radius: 2px;
+    background-color: #72C00D;
+    color: white;
+}
+
+.agregar-personal:hover {
+    background-color: #518b03;
+
+}
+
+.eliminar-personal {
+    width: 200px;
+    height: 40px;
+    border: 2px solid #ab1100;
+    background-color: #ff4b37;
+    border-radius: 2px;
+    color: white;
+}
+
+.eliminar-personal:hover {
+    background-color: #ab1100;
+}
+
+.boton-volver {
+    border: 2px solid #ab1100;
+    background-color: #ff4b37;
+    border-radius: 2px;
+    color: white;
+    width: 92.5%;
+    height: 45px;
+}
+
+.boton-volver:hover {
+    background-color: #ab1100;
+
+}
+
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 500px;
+    align-items: center;
+    text-align: center;
+}
+
+.modal-h2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.input-modal {
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin-left: 10px;
+    margin-top: 10px;
+    padding-left: 5px;
+}
+
+.modal-crear {
+    border: 2px solid #518b03;
+    background-color: #72C00D;
+    border-radius: 2px;
+    color: white;
+    width: 240px;
+    margin-right: 5px !important;
+}
+
+.modal-crear:hover {
+    background-color: #518b03;
+
+}
+
+.modal-cancelar {
+    border: 2px solid #ab1100;
+    background-color: #ff4b37;
+    border-radius: 2px;
+    color: white;
+    width: 240px;
+    margin-right: 5px !important;
+    margin-top: -5px !important;
+    margin-bottom: 20px !important;
+}
+
+.modal-cancelar:hover {
+    background-color: #ab1100;
+
+}
+
+.imagen {
+    width: 700px;
+    max-width: 700px;
+    height: 320px;
+    max-height: 320px;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.controlador-imagen {
+    background-color: #72C00D;
+    border: 2px solid #518B03;
+    color: white;
+    border-radius: 2px;
+    margin-left: 0 !important;
+    margin-bottom: 0px !important;
+    width: 700px;
+}
+
+.controlador-imagen:hover {
+    background-color: #518B03;
+}
+

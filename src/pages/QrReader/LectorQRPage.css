@@ -1,0 +1,45 @@
+.LectorQR {
+    display: flex;
+    justify-content: center; /* Alinea horizontalmente al centro */
+    align-items: center; /* Alinea verticalmente al centro */
+    flex-direction: column; /* Alinea los elementos en una columna vertical */
+    font-family: 'Apple Chancery', cursive;
+}
+
+.LectorQR h1 {
+    font-size: 24px;
+    margin: 10px;
+}
+
+.DivVideoQR {
+
+    width: 40%; /* Ancho del video al 100% del div contenedor */
+    height: auto; /* Altura automática para mantener la proporción original */
+    border-radius: 20px;
+}
+
+.VideoQR {
+    width: 100%; /* Ancho del video al 100% del div contenedor */
+    height: auto; /* Altura automática para mantener la proporción original */
+    border-radius: 10px;
+    transform: scaleX(1); /* -1 Voltea horizontalmente la imagen del video */
+      
+}
+
+.boton-cancelar{
+    border: 2px solid #ab1100;
+    background-color: #ff4b37;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    width: 200px !important;
+    border-radius: 2px;
+  }
+  
+  .boton-cancelar:hover{
+    background-color: #ab1100;
+  }
+
+.Link {
+    text-decoration: none;
+    color: white;
+}

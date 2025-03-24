@@ -1,0 +1,52 @@
+.divNuevoEquipo{
+  width: 380px; /* Ajusta el tamaño del botón a tu gusto */
+  height: 260px; /* Ajusta el tamaño del botón a tu gusto */
+  margin-top: 10px;
+  margin-left: 10px;
+  }
+
+.BotonNuevoEquipo {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%; /* Ajusta el tamaño del botón a tu gusto */
+  height: 100%; /* Ajusta el tamaño del botón a tu gusto */
+  background-color: #72C00D; /* Color de fondo del botón */
+  color: #041E42; /* Color del texto del botón */
+  cursor: pointer;
+  transition: background-color 0.5s ease, transform 0.5s ease;
+  border-radius: 10px;
+  text-decoration: none;
+  }
+  
+  .BotonNuevoEquipo:hover {
+    background-color: #041E42; /* Color de fondo del botón al pasar el ratón por encima */
+    color: #72C00D;
+    text-decoration: none;
+  
+  }
+  
+  .BotonNuevoEquipoImage {
+    margin-top: 30px;
+    width: 80%; /* Ajusta el tamaño de la imagen a tu gusto */
+    height: 80%; /* Ajusta el tamaño de la imagen a tu gusto */
+    transition: transform 0.3s ease;
+    border-radius: 4px;
+  }
+  
+  .BotonNuevoEquipoImage:hover {
+    transform: translateY(-2px); /* Mueve la imagen un poco hacia arriba al pasar el ratón por encima */
+  }
+  
+  .BotonNuevoEquipoText {
+    margin-top: 4px;
+    font-size: 32px;
+    font-family: 'Apple Chancery', cursive;
+  }
+  
+  
+  .Link {
+    text-decoration: none;
+  }
+  

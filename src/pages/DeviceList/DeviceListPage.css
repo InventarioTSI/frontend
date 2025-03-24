@@ -1,0 +1,105 @@
+.div-list{
+  font-family: 'Apple Chancery', cursive;
+}
+
+.titulo {
+  font-size: 38px;
+  color: #72C00D;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.div-filtros {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-left: 40px;
+  margin-right: 40px !important;
+
+}
+
+.div-filtro-dispositivo,
+.div-filtro-empleado,
+.div-filtro-estado {
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.label-filtro{
+  text-align: center;
+}
+
+.div-filtro-dispositivo input,
+.div-filtro-empleado select,
+.div-filtro-estado select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+.table-dispositivos {
+  margin: 25px;
+  width: 95%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.table-dispositivos th,
+.table-dispositivos td {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.table-dispositivos a {
+  color: #72C00D;
+}
+
+.table-dispositivos a:hover {
+  color: #508609;
+}
+
+button {
+  margin: 15px !important;
+  width: 100%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+}
+
+
+.boton-cancelar{
+  border: 2px solid #ab1100;
+  background-color: #ff4b37;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  width: 180px;
+  border-radius: 2px;
+}
+
+.boton-cancelar:hover{
+  background-color: #ab1100;
+}
+
+.no-data{
+  margin: 20px;
+}
+
+.boton-descarga{
+  width: 98% !important;
+  margin-right: -10px !important;
+  border: 2px solid #b46c00;
+  background-color: #ff8400;
+  color: #fff;
+  padding: 8px;
+  width: 180px;
+  border-radius: 2px;
+}
+
+.boton-descarga:hover{
+  background-color: #b46c00;
+}

@@ -1,0 +1,55 @@
+.previous-button,
+.next-button {
+  font-family: 'Apple Chancery', cursive;
+  padding: 0.5rem;
+  border: 1px solid #72C00D;
+  cursor: pointer;
+  background-color: #72C00D;
+  color: #fff;
+  width: 240px;
+  /* Ancho fijo */
+  text-align: center;
+  /* Asegura que el texto esté centrado */
+}
+
+.previous-button:hover,
+.next-button:hover {
+  background-color: #041E42;
+  border: 1px solid #041E42;
+  color: #fff;
+}
+
+.previous-button:disabled,
+.next-button:disabled {
+  background-color: #ccc;
+  border: 1px solid #ccc;
+  cursor: not-allowed;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  /* Mayor espacio entre elementos */
+}
+
+
+.page-number-display {
+  font-family: 'Apple Chancery', cursive;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: 1px solid #72C00D;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #72C00D;
+}
+
+.current-page-number {
+  color: #041E42;
+}
+
+.total-pages-number {
+  color: #72C00D;
+}
