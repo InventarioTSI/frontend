@@ -1,18 +1,19 @@
 .personal-container {
-    padding-top: 20px;
+    padding: 40px;
     display: flex;
     justify-content: space-between;
 }
 
 .title {
     padding-top: 20px;
-    padding-bottom: 20px;
-    text-align: center;
-    font-size: 30px;
+        
+    font-size: 38px;
+    color: #72C00D;
+    font-weight: bold;
 }
 
 .left-section {
-    padding-left: 20px;
+    padding-left: 40px;
     padding-right: 10px;
     width: 50%;
 }
@@ -22,36 +23,39 @@
     padding-left: 10px;
     width: 50%;
 }
+.divGestion{
+    
+    margin-left: 40px;
+}
 
 .personal-select {
     border: 2px solid black;
     border-radius: 5px;
     display: block;
-    width: 100%;
-    padding: 10px;
+    width: 411px;
+    padding: 5px;
     margin-bottom: 10px;
     font-size: 16px;
+}   
+.personal-h2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 22px;
 }
 
-.personal-option {
-    padding: 10px;
-}
 
 .main-container {
-    font-family: 'Apple Chancery', cursive;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 
-
-
-
 .form-personal {
-    width: 65%;
-    height: 200px;
-    padding-top: 10px;
+    width: 80%;
+    height: auto;
+    padding: 10px;
     text-align: right;
 }
 
@@ -89,28 +93,32 @@
 
 .div-botones-personal {
     display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-right: 30px;
+    
 }
 
 .modificar-personal {
-    width: 200px;
+    width: auto;
+    padding: 6px;
     height: 40px;
     border: 2px solid #041E42;
-    border-radius: 2px;
+    border-radius: 5px;
     background-color: #2a72d6;
     color: white;
 }
 
 .modificar-personal:hover {
-
-    background-color: #041E42;
-
+    background-color: #083778;
 }
 
 .agregar-personal {
-    width: 200px;
+    width: auto;
+    padding: 6px;
     height: 40px;
-    border: 2px solid #518b03;
-    border-radius: 2px;
+    border: 2px solid #203802;
+    border-radius: 5px;
     background-color: #72C00D;
     color: white;
 }
@@ -121,24 +129,30 @@
 }
 
 .eliminar-personal {
-    width: 200px;
+    width: auto;
     height: 40px;
-    border: 2px solid #ab1100;
+    padding: 6px;
+    border: 2px solid #350701;
     background-color: #ff4b37;
-    border-radius: 2px;
+    border-radius: 5px;
     color: white;
 }
 
 .eliminar-personal:hover {
     background-color: #ab1100;
 }
-
+.boton-volver-container {
+    
+    
+    margin-top: 30px;
+    margin-left: 140px;
+}
 .boton-volver {
     border: 2px solid #ab1100;
     background-color: #ff4b37;
     border-radius: 2px;
     color: white;
-    width: 92.5%;
+    width: 35%;
     height: 45px;
 }
 
@@ -216,26 +230,35 @@
 }
 
 .imagen {
-    width: 700px;
-    max-width: 700px;
+    width: 600px;
+    max-width: 600px;
     height: 320px;
     max-height: 320px;
     border: 2px solid black;
     border-radius: 5px;
     padding: 5px;
 }
+.botones-mapa {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    
+    margin-top: 30px;
 
+}
 .controlador-imagen {
     background-color: #72C00D;
     border: 2px solid #518B03;
     color: white;
-    border-radius: 2px;
-    margin-left: 0 !important;
-    margin-bottom: 0px !important;
-    width: 700px;
+    border-radius: 5px;
+    
+    width: 160px;
+    height: 40px;
 }
 
 .controlador-imagen:hover {
     background-color: #518B03;
+    border: 2px solid #72C00D;
 }
 

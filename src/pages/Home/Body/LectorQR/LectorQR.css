@@ -1,12 +1,11 @@
 .divQr{
   width: 380px; /* Ajusta el tamaño del botón a tu gusto */
-  height: 260px; /* Ajusta el tamaño del botón a tu gusto */
+  height: 270px; /* Ajusta el tamaño del botón a tu gusto */
   margin-top: 10px;
   margin-left: 10px;
 }
 
 .BotonQR {
-
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -16,34 +15,36 @@
   background-color: #72C00D; /* Color de fondo del botón */
   color: #041E42; /* Color del texto del botón */
   cursor: pointer;
-  transition: background-color 0.5s ease, transform 0.5s ease;
-  border-radius: 10px;
-  text-decoration: none;
+  transition: background-color 0.5s ease, transform 0.6s ease;
+  border-radius: 8px;
+  border: 2px solid #041E42;
 }
 
 .BotonQR:hover {
   background-color: #041E42; /* Color de fondo del botón al pasar el ratón por encima */
-  color: #72C00D;
-  text-decoration: none;
+    color: #72C00D;
+    text-decoration: none;
+    border: 3px solid #72C00D
 
 }
 
 .BotonQRImage {
-  margin-top: 30px;
+  margin-top: 20px;
   width: 80%; /* Ajusta el tamaño de la imagen a tu gusto */
   height: 80%; /* Ajusta el tamaño de la imagen a tu gusto */
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
   border-radius: 4px;
+  border: 2px solid #041E42;
 }
 
 .BotonQRImage:hover {
-  transform: translateY(-2px); /* Mueve la imagen un poco hacia arriba al pasar el ratón por encima */
+  transform: translateY(-3px); /* Mueve la imagen un poco hacia arriba al pasar el ratón por encima */
+  border: 2px solid #72C00D; /* Mueve la imagen un poco hacia arriba al pasar el ratón por encima */
 }
 
 .BotonQRText {
-  margin-top: 4px;
-  font-size: 32px;
-  font-family: 'Apple Chancery', cursive;
+  margin-bottom: 8px;
+    font-size: 32px;
 }
 
 
