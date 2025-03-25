@@ -103,11 +103,13 @@ function DeviceListPage() {
             onChange={(e) => setEmployeeFilter(e.target.value)}
           >
             <option value="">Todos</option>
-            {employees.map((employee) => (
-              <option key={employee.Id} value={employee.Puesto}>
-                {employee.Puesto} - {employee.Empleado}
-              </option>
-            ))}
+            {employees
+              .sort((a, b) => a.Empleado.localeCompare(b.Empleado)) // Ordenar alfabéticamente por nombre
+              .map((employee) => (
+                <option key={employee.Id} value={employee.Puesto}>
+                  {employee.Empleado} - {employee.Puesto}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -131,73 +133,7 @@ function DeviceListPage() {
         </div>
       </div>
 
-      {/* Renderizado de la tabla */}
-      {devices.length > 0 ? (
-        <table className="table-dispositivos">
-          <thead>
-            <tr>
-              <th>Tipo</th>
-              <th>Código</th>
-              <th>Factura</th>
-              <th>Modelo</th>
-              <th>Año de compra</th>
-              <th>Puesto de trabajo</th>
-              <th>Observaciones</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {devices.map((device) => {
-              let deviceType = device.Tipo;
-              let deviceId = device.Id;
-              let employee = findEmployee(device.PuestosTrabajo);
-
-              return (
-                <tr key={`${device.Id}-${device.Tipo}`}>
-                  <td>{deviceType}</td>
-                  <td>{device.Referencia}</td>
-                  <td>
-                    <a
-                      href={`./facturas/${device.Factura}.pdf`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {device.Factura}
-                    </a>
-                  </td>
-                  <td>{device.Modelo}</td>
-                  <td>{device.AñoCompra}</td>
-                  <td>
-                    {employee
-                      ? `${employee.Puesto} - ${employee.Empleado || ""}`
-                      : ""}
-                  </td>
-                  <td>{device.Observaciones}</td>
-                  <td>{device.Estado}</td>
-                  <td>
-                    {/* Cambiado para usar navigate */}
-                    <a
-                      onClick={() =>
-                        navigate(`/DeviceInfo/${deviceType}/${deviceId}`)
-                      }
-                      className="boton-ver"
-                    >
-                      Ver
-                    </a>
-                    {/* Fin del cambio */}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      ) : (
-        <p className="no-data">No hay datos disponibles</p>
-      )}
-
       <div className="div-list">
-        <h1 className="titulo">Dispositivos</h1>
         <div className="div-filtros">
           {/* Selector para dispositivos por página */}
           <div className="div-filtro-limite">
@@ -214,6 +150,72 @@ function DeviceListPage() {
             </select>
           </div>
         </div>
+
+        {/* Renderizado de la tabla */}
+        {devices.length > 0 ? (
+          <table className="table-dispositivos">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Código</th>
+                <th>Factura</th>
+                <th>Modelo</th>
+                <th>Año de compra</th>
+                <th>Puesto de trabajo</th>
+                <th>Observaciones</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {devices.map((device) => {
+                let deviceType = device.Tipo;
+                let deviceId = device.Id;
+                let employee = findEmployee(device.PuestosTrabajo);
+
+                return (
+                  <tr key={`${device.Id}-${device.Tipo}`}>
+                    <td>{deviceType}</td>
+                    <td>{device.Referencia}</td>
+                    <td>
+                      <a
+                        href={`./facturas/${device.Factura}.pdf`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {device.Factura}
+                      </a>
+                    </td>
+                    <td>{device.Modelo}</td>
+                    <td>{device.AñoCompra}</td>
+                    <td>
+                      {employee
+                        ? `${employee.Puesto} - ${employee.Empleado || ""}`
+                        : ""}
+                    </td>
+                    <td>{device.Observaciones}</td>
+                    <td>{device.Estado}</td>
+                    <td>
+                      {/* Cambiado para usar navigate */}
+                      <a
+                        onClick={() =>
+                          navigate(`/DeviceInfo/${deviceType}/${deviceId}`)
+                        }
+                        className="boton-ver"
+                      >
+                        Ver
+                      </a>
+                      {/* Fin del cambio */}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <p className="no-data">No hay datos disponibles</p>
+        )}
+        <br />
 
         {/* Renderizado de la tabla y paginación */}
         <table>...</table>
