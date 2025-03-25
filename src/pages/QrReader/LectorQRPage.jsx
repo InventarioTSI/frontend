@@ -7,11 +7,9 @@ import React, { useState, useEffect } from "react";
 import { useZxing } from "react-zxing";
 //import { useMediaDevices } from "react-media-devices";//Added RG 24/06/2024
 import { Link } from "react-router-dom";
-import "./LectorQRPage.css"
-
+import "./LectorQRPage.css";
 
 function LectorQRPage() {
-
   const [deviceId, setDeviceId] = useState(null);
   const [deviceType, setDeviceType] = useState(null);
 
@@ -30,7 +28,7 @@ function LectorQRPage() {
     },
   });
 
-    // Efecto que se ejecuta cuando el tipo de dispositivo o el id cambian
+  // Efecto que se ejecuta cuando el tipo de dispositivo o el id cambian
   useEffect(() => {
     if (deviceType) {
       (window.location.href = `/DeviceInfo/${deviceType}/${deviceId}`),
@@ -38,19 +36,19 @@ function LectorQRPage() {
     }
   }, [deviceType, deviceId]);
 
-    return (
-        <div className='LectorQR'>
-          <h1>Lector de QR</h1>
-          <div className= 'DivVideoQR' >
-            <video className= 'VideoQR' ref={ref} />
-          </div>
-          <button className="boton-cancelar">
-            <Link className="Link" to = '/home'>
-              Volver al menú
-            </Link>
-          </button>
-        </div>
-    )
+  return (
+    <div className="LectorQR">
+      <h1>Lector de QR</h1>
+      <div className="DivVideoQR">
+        <video className="VideoQR" ref={ref} />
+      </div>
+      <button className="boton-cancelar-qr">
+        <Link className="Link" to="/home">
+          Volver al menú
+        </Link>
+      </button>
+    </div>
+  );
 }
 
 export default LectorQRPage;

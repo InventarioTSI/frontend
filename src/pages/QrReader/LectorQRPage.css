@@ -3,17 +3,19 @@
     justify-content: center; /* Alinea horizontalmente al centro */
     align-items: center; /* Alinea verticalmente al centro */
     flex-direction: column; /* Alinea los elementos en una columna vertical */
-    font-family: 'Apple Chancery', cursive;
+   
 }
 
 .LectorQR h1 {
-    font-size: 24px;
+    font-size: 35px;
+    color: #72C00D;
+    font-weight: bold;
     margin: 10px;
 }
 
 .DivVideoQR {
 
-    width: 40%; /* Ancho del video al 100% del div contenedor */
+    width: 35%; /* Ancho del video al 100% del div contenedor */
     height: auto; /* Altura automática para mantener la proporción original */
     border-radius: 20px;
 }
@@ -26,13 +28,13 @@
       
 }
 
-.boton-cancelar{
+.boton-cancelar-qr {
     border: 2px solid #ab1100;
     background-color: #ff4b37;
     color: #fff;
-    padding: 0.5rem 1rem;
-    width: 200px !important;
-    border-radius: 2px;
+    padding: 0.5rem 0.5rem;
+    width: auto;
+    border-radius: 5px;
   }
   
   .boton-cancelar:hover{

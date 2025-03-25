@@ -4,14 +4,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 400px;
-  margin-top: 80px; /* Ajusta este valor según lo lejos que quieras mover las filas hacia abajo */
+  height: 420px;
+  margin-top: 70px;
+  gap: 10px ; /* Ajusta este valor según lo lejos que quieras mover las filas hacia abajo */
 }
   
 .fila {
   display: flex;
   width: 100%;
-  height: 300px;
+  height: 350px;
   justify-content: center;    
   margin-top: 30px;
 }
