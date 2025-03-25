@@ -223,7 +223,6 @@ function DeviceListPage() {
       <div className="div-list">
 
         {/* Renderizado de la tabla y paginación */}
-        <table>...</table>
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
