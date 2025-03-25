@@ -132,6 +132,24 @@ function DeviceListPage() {
           </select>
         </div>
       </div>
+      {/* Filtro por cantidad de dispositivos por página */}
+      <div className="div-filtros">
+        {/* Selector para dispositivos por página */}
+        <div className="div-filtro-limite">
+          <label className="label-filtro">Dispositivos por página</label>
+          <select
+            value={limit}
+            onChange={(e) => setLimit(Number(e.target.value))}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
+        </div>
+      </div>
+
 
       {/* Renderizado de la tabla */}
       {devices.length > 0 ? (
@@ -203,23 +221,6 @@ function DeviceListPage() {
 
 
       <div className="div-list">
-        <h1 className="titulo">Dispositivos</h1>
-        <div className="div-filtros">
-          {/* Selector para dispositivos por página */}
-          <div className="div-filtro-limite">
-            <label className="label-filtro">Dispositivos por página</label>
-            <select
-              value={limit}
-              onChange={(e) => setLimit(Number(e.target.value))}
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
-            </select>
-          </div>
-        </div>
 
         {/* Renderizado de la tabla y paginación */}
         <table>...</table>
