@@ -178,9 +178,12 @@ function DeviceListPage() {
                   <td>
                     {/* Cambiado para usar navigate */}
                     <a
-                      onClick={() =>
-                        navigate(`/DeviceInfo/${deviceType}/${deviceId}`)
-                      }
+                      onClick={() => {
+                        // Forzar recarga pasando un estado único
+                        navigate(`/DeviceInfo/${deviceType}/${deviceId}`, {
+                          state: { timestamp: Date.now() } // Esto fuerza una recarga
+                        });
+                      }}
                       className="boton-ver"
                     >
                       Ver
