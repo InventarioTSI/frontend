@@ -103,11 +103,13 @@ function DeviceListPage() {
             onChange={(e) => setEmployeeFilter(e.target.value)}
           >
             <option value="">Todos</option>
-            {employees.map((employee) => (
-              <option key={employee.Id} value={employee.Puesto}>
-                {employee.Puesto} - {employee.Empleado}
-              </option>
-            ))}
+            {employees
+              .sort((a, b) => a.Empleado.localeCompare(b.Empleado)) // Ordenar alfabéticamente por nombre
+              .map((employee) => (
+                <option key={employee.Id} value={employee.Puesto}>
+                  {employee.Empleado} - {employee.Puesto}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -198,6 +200,7 @@ function DeviceListPage() {
       ) : (
         <p className="no-data">No hay datos disponibles</p>
       )}
+
 
       <div className="div-list">
         <h1 className="titulo">Dispositivos</h1>
