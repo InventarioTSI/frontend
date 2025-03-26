@@ -217,32 +217,32 @@ function DeviceListPage() {
       </div>
 
       <Link to="/home">
-        <button className="boton-cancelar">Volver al menú</button>
+        <div className="div-boton-cancelar">
+          <button className="boton-cancelar">Volver al menú</button>
+        </div>
       </Link>
 
       {employeeFilter && (
-        <div className="">
-          <div>
-            <PDFDownloadLink
-              document={
-                <Template
-                  ref={templateRef}
-                  employee={employeeFilter}
-                  date={new Date().toLocaleDateString()}
-                  devices={devices}
-                />
-              }
-              fileName="Documento_entrega_instrumentos.pdf"
-            >
-              {({ blob, url, loading, error }) =>
-                loading ? (
-                  "Cargando documento..."
-                ) : (
-                  <button className="boton-descarga">Descargar informe</button>
-                )
-              }
-            </PDFDownloadLink>
-          </div>
+        <div className="div-boton-descarga">
+          <PDFDownloadLink
+            document={
+              <Template
+                ref={templateRef}
+                employee={employeeFilter}
+                date={new Date().toLocaleDateString()}
+                devices={devices}
+              />
+            }
+            fileName="Documento_entrega_instrumentos.pdf"
+          >
+            {({ blob, url, loading, error }) =>
+              loading ? (
+                "Cargando documento..."
+              ) : (
+                <button className="boton-descarga">Descargar informe</button>
+              )
+            }
+          </PDFDownloadLink>
         </div>
       )}
     </div>

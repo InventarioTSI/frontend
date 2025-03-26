@@ -63,7 +63,7 @@
 }
 
 button {
-  margin: 15px !important;
+  margin: 20px !important;
   width: 100%;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   color: #fff;
@@ -71,13 +71,18 @@ button {
   padding: 0.5rem 1rem;
   border-radius: 2px;
 }
-
+.div-boton-cancelar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
 
 .boton-cancelar{
   border: 2px solid #ab1100;
   background-color: #ff4b37;
   color: #fff;
-  padding: 0.5rem 1rem;
+ 
   width: auto;
   padding: 8px;
   border-radius: 5px;
@@ -90,18 +95,26 @@ button {
 .no-data{
   margin: 20px;
 }
-
+.div-boton-descarga{
+  display: flex;
+  justify-content:space-around;
+  align-items: center;
+  
+  
+}
 .boton-descarga{
-  width: 40% !important;
-  margin-right: -10px !important;
+  width: 80% ;
+  margin-right: 2000px;
   border: 2px solid #b46c00;
-  background-color: #ff8400;
+  border-radius: 5px;
+  background-color: #f7ab3a;
   color: #fff;
   padding: 8px;
-  width: 180px;
-  border-radius: 2px;
+  display: flex;
+  
+  justify-content: center;
 }
 
 .boton-descarga:hover{
-  background-color: #b46c00;
+  background-color: #7e581f;
 }
