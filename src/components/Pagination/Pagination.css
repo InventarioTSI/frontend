@@ -1,6 +1,6 @@
 .previous-button,
 .next-button {
-  font-family: 'Apple Chancery', cursive;
+ 
   padding: 0.5rem;
   border: 1px solid #72C00D;
   cursor: pointer;
@@ -36,8 +36,8 @@
 
 
 .page-number-display {
-  font-family: 'Apple Chancery', cursive;
-  font-size: 1rem;
+  
+  font-size: 15px;
   font-weight: bold;
   padding: 0.5rem 1rem;
   border: 1px solid #72C00D;
