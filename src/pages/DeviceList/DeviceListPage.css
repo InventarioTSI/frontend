@@ -1,6 +1,3 @@
-.div-list{
-  
-}
 
 .titulo {
   font-size: 38px;
@@ -71,11 +68,17 @@ button {
   padding: 0.5rem 1rem;
   border-radius: 2px;
 }
+
 .div-boton-cancelar{
   display: flex;
   justify-content: center;
   align-items: center;
   
+
+
+.boton-ver{
+  cursor: pointer;
+
 }
 
 .boton-cancelar{

@@ -18,6 +18,7 @@ import Header from "./pages/Home/Header/Header"
 import AddDevice from "./pages/AddDevice/AddDevice";
 import DeviceInfo from "./pages/DeviceInfo/DeviceInfo";
 import Personal from "./pages/Personal/Personal";
+import ManageUsers from "./pages/ManageUsers/ManageUsers";
 
 export default function App() {
 
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/DeviceInfo/:deviceType/:deviceId" element={<DeviceInfo/>} />
             <Route path="/DeviceList" element={<DeviceListPage />} />
             <Route path="/Personal" element={<Personal />} />
+            <Route path="/admin/users" element={<ManageUsers />} />
           </Route>
           <Route path="*" element={<LoginPage />} /> {/* Si el usuario no está autenticado, será redirigido a la página de login */}
         </Routes>
