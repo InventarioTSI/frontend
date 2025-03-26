@@ -2,7 +2,7 @@ import Pagination from "../../components/Pagination/Pagination";
 import Template from "../../components/Template";
 import { useDevice } from "../../context/DeviceContext";
 import { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Importamos useNavigate
+import { Link, useNavigate } from "react-router-dom"; 
 import "./DeviceListPage.css";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import axios from "axios"; // Importamos axios para manejar cancelación de solicitudes
