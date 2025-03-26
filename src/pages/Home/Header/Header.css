@@ -13,6 +13,7 @@
 
 
 .userIcon {
+    position: relative; /* Necesario para posicionar el menú desplegable */
     height: 50px;
     margin-top: 5px;
     margin-right: 10px;
@@ -35,18 +36,65 @@
 
 }
 
-.buttonlogout {
-    align-items: center;
-    background-color: #ff7c7c;
-    border: 3px solid #ff3d3d;
-    border-radius: 5px;
-    padding: 5px;
-    height: 40px;
-    width: 130px;
-
+/* Estilos mejorados para el menú desplegable */
+.dropdownMenu {
+    position: absolute;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más suave */
+    overflow: hidden; /* Evita que el contenido sobresalga */
+    min-width: 200px; /* Ancho mínimo para evitar que se corte */
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out; /* Animación de entrada por defecto */
 }
 
-.buttonlogout:hover {
-
-    border: 3px solid #550000;
+/* Animación para el menú desplegable */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
+
+/* Animación para la salida del menú desplegable */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Clase para la salida del menú desplegable */
+.dropdownMenu.fadeOut {
+    animation: fadeOut 0.3s ease-in-out; /* Animación de salida */
+}
+
+/* Estilos mejorados para los elementos del menú */
+.dropdownItem {
+    display: block;
+    padding: 12px 20px; 
+    border-radius: 20px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+    color: #333; /* Color del texto */
+    transition: background-color 0.2s ease, color 0.2s ease; /* Transición suave */
+    white-space: nowrap; /* Evita que el texto se corte en varias líneas */
+}
+
+/* Efecto hover para los elementos del menú */
+.dropdownItem:hover {
+    background-color: #f7f7f7; /* Fondo más claro al pasar el mouse */
+    color: #72C00D; /* Color de texto destacado */
+}
+
