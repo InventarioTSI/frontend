@@ -5,22 +5,21 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom"; 
 import "./DeviceListPage.css";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import axios from "axios"; // Importamos axios para manejar cancelación de solicitudes
+import axios from "axios";
 
 function DeviceListPage() {
   const { getAllDevices, errors } = useDevice();
-  const [devices, setDevices] = useState([]); // Estado para almacenar los dispositivos obtenidos
-  const [employees, setEmployees] = useState([]); // Estado para almacenar los empleados asociados
-  const [currentPage, setCurrentPage] = useState(1); // Página actual para la paginación
-  const [totalPages, setTotalPages] = useState(""); // Total de páginas para la paginación
-  const [searchTerm, setSearchTerm] = useState(""); // Término de búsqueda para filtrar dispositivos
-  const [stateFilter, setStateFilter] = useState(""); // Filtro por estado de los dispositivos
-  const [employeeFilter, setEmployeeFilter] = useState(""); // Filtro por empleado
+  const [devices, setDevices] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalDevices, setTotalDevices] = useState(0); // Total de dispositivos
+  const [searchTerm, setSearchTerm] = useState("");
+  const [stateFilter, setStateFilter] = useState("");
+  const [employeeFilter, setEmployeeFilter] = useState("");
   const templateRef = useRef();
-  const [limit, setLimit] = useState(10); // Valor inicial: 10 dispositivos por página
-  const navigate = useNavigate(); // Creamos una instancia de useNavigate
+  const [limit, setLimit] = useState(10);
+  const navigate = useNavigate();
 
-  // CancelToken para manejar solicitudes concurrentes
   const cancelTokenSource = useRef(null);
 
   useEffect(() => {
@@ -31,22 +30,19 @@ function DeviceListPage() {
       cancelTokenSource.current = axios.CancelToken.source();
 
       try {
-        // Llamar a getAllDevices con los filtros y la paginación
         const result = await getAllDevices(
           currentPage,
           limit,
-          searchTerm.trim(), // Asegurarse de no enviar espacios extra
+          searchTerm.trim(),
           stateFilter,
           employeeFilter,
-          cancelTokenSource.current.token // Pasamos el token de cancelación
+          cancelTokenSource.current.token
         );
 
         // Actualizar los estados con los datos recibidos
         setDevices(result.devices);
         setEmployees(result.employees);
-
-        // Calcular el número total de páginas
-        setTotalPages(result.total ? Math.ceil(result.total / limit) : 1);
+        setTotalDevices(result.total); // Actualizar el total de dispositivos
       } catch (error) {
         if (axios.isCancel(error)) {
           console.log("Request canceled:", error.message);
@@ -63,17 +59,17 @@ function DeviceListPage() {
         cancelTokenSource.current.cancel("Component unmounted");
       }
     };
-  }, [currentPage, limit, searchTerm, stateFilter, employeeFilter]); // Cuando cambian los filtros, se vuelve a cargar
+  }, [currentPage, limit, searchTerm, stateFilter, employeeFilter]);
 
   const handlePageChange = (page) => {
-    setCurrentPage(page); // Cambia la página actual
+    setCurrentPage(page);
   };
 
   const findEmployee = (puestoTrabajo) => {
     return employees.find((employee) => employee.Puesto === puestoTrabajo);
   };
+
   useEffect(() => {
-    // Resetear a la primera página si cambia cualquier filtro
     setCurrentPage(1);
   }, [limit, searchTerm, stateFilter, employeeFilter]);
 
@@ -84,7 +80,6 @@ function DeviceListPage() {
       <h1 className="titulo">Dispositivos</h1>
 
       <div className="div-filtros">
-        {/* Filtro de búsqueda */}
         <div className="div-filtro-dispositivo">
           <label className="label-filtro">Buscador</label>
           <input
@@ -95,7 +90,6 @@ function DeviceListPage() {
           />
         </div>
 
-        {/* Filtro por empleado */}
         <div className="div-filtro-empleado">
           <label className="label-filtro">Empleados</label>
           <select
@@ -104,7 +98,7 @@ function DeviceListPage() {
           >
             <option value="">Todos</option>
             {employees
-              .sort((a, b) => a.Empleado.localeCompare(b.Empleado)) // Ordenar alfabéticamente por nombre
+              .sort((a, b) => a.Empleado.localeCompare(b.Empleado))
               .map((employee) => (
                 <option key={employee.Id} value={employee.Puesto}>
                   {employee.Empleado} - {employee.Puesto}
@@ -113,7 +107,6 @@ function DeviceListPage() {
           </select>
         </div>
 
-        {/* Filtro por estado */}
         <div className="div-filtro-estado">
           <label className="label-filtro">Estado</label>
           <select
@@ -132,9 +125,8 @@ function DeviceListPage() {
           </select>
         </div>
       </div>
-      {/* Filtro por cantidad de dispositivos por página */}
+
       <div className="div-filtros">
-        {/* Selector para dispositivos por página */}
         <div className="div-filtro-limite">
           <label className="label-filtro">Dispositivos por página</label>
           <select
@@ -150,8 +142,6 @@ function DeviceListPage() {
         </div>
       </div>
 
-
-      {/* Renderizado de la tabla */}
       {devices.length > 0 ? (
         <table className="table-dispositivos">
           <thead>
@@ -160,6 +150,7 @@ function DeviceListPage() {
               <th>Código</th>
               <th>Factura</th>
               <th>Modelo</th>
+              <th>Número de serie</th>
               <th>Año de compra</th>
               <th>Puesto de trabajo</th>
               <th>Observaciones</th>
@@ -169,13 +160,11 @@ function DeviceListPage() {
           </thead>
           <tbody>
             {devices.map((device) => {
-              let deviceType = device.Tipo;
-              let deviceId = device.Id;
               let employee = findEmployee(device.PuestosTrabajo);
 
               return (
                 <tr key={`${device.Id}-${device.Tipo}`}>
-                  <td>{deviceType}</td>
+                  <td>{device.Tipo}</td>
                   <td>{device.Referencia}</td>
                   <td>
                     <a
@@ -187,6 +176,7 @@ function DeviceListPage() {
                     </a>
                   </td>
                   <td>{device.Modelo}</td>
+                  <td>{device.NumSerie || "N/A"}</td>
                   <td>{device.AñoCompra}</td>
                   <td>
                     {employee
@@ -196,19 +186,16 @@ function DeviceListPage() {
                   <td>{device.Observaciones}</td>
                   <td>{device.Estado}</td>
                   <td>
-                    {/* Cambiado para usar navigate */}
                     <a
-                      onClick={() => {
-                        // Forzar recarga pasando un estado único
-                        navigate(`/DeviceInfo/${deviceType}/${deviceId}`, {
-                          state: { timestamp: Date.now() } // Esto fuerza una recarga
-                        });
-                      }}
+                      onClick={() =>
+                        navigate(`/DeviceInfo/${device.Tipo}/${device.Id}`, {
+                          state: { timestamp: Date.now() },
+                        })
+                      }
                       className="boton-ver"
                     >
                       Ver
                     </a>
-                    {/* Fin del cambio */}
                   </td>
                 </tr>
               );
@@ -219,23 +206,20 @@ function DeviceListPage() {
         <p className="no-data">No hay datos disponibles</p>
       )}
 
-
       <div className="div-list">
-
-        {/* Renderizado de la tabla y paginación */}
         <Pagination
           currentPage={currentPage}
-          totalPages={totalPages}
+          totalItems={totalDevices}
+          itemsPerPage={limit}
           onPageChange={handlePageChange}
+          hasMoreData={devices.length === limit}
         />
       </div>
 
-      {/* Botón para volver */}
       <Link to="/home">
         <button className="boton-cancelar">Volver al menú</button>
       </Link>
 
-      {/* Descargar informe */}
       {employeeFilter && (
         <div className="">
           <div>
