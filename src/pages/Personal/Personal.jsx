@@ -22,7 +22,7 @@ import Plano_P1 from "../../imagenes/Plano_P1.png";
 import "./Personal.css";
 
 function Personal() {
-  // Definición de los estados necesarios para manejar la selección de puestos, empleados y planos
+  // Definición de los estados necesarios para manejar la selección de puestos, empleados, planos y mapa
   const [selectedOption, setSelectedOption] = useState("");
   const [empleados, setEmpleados] = useState([]);
 
@@ -36,6 +36,8 @@ function Personal() {
   const [iPuesto, setIPuesto] = useState("");
   const [iEmpleado, setIEmpleado] = useState("");
   const [iPlanta, setIPlanta] = useState("");
+
+  const [activeButton, setActiveButton] = useState(null);
 
   // Efecto para cargar los datos de los empleados al cargar el componente
   useEffect(() => {
@@ -170,11 +172,13 @@ function Personal() {
               value={selectedOption}
               onChange={handleSelectChange}
             >
-              {empleados.map((empleado) => (
-                <option key={empleado.Puesto} value={empleado.Puesto}>
-                  {empleado.Puesto} - {empleado.Empleado}
-                </option>
-              ))}
+              {empleados
+                .sort((a, b) => a.Puesto - b.Puesto) // Ordenar por número de puesto
+                .map((empleado) => (
+                  <option key={empleado.Puesto} value={empleado.Puesto}>
+                    {empleado.Puesto} - {empleado.Empleado}
+                  </option>
+                ))}
             </select>
 
             <form className="form-personal">
@@ -251,20 +255,22 @@ function Personal() {
                     <option value="Baja">Baja</option>
                     <option value="Laboratorio">Laboratorio</option>
                   </select>
-                  <button className="modal-crear" onClick={handleCreate}>
-                    Crear
-                  </button>
-                  <button
-                    className="modal-cancelar"
-                    onClick={() => {
-                      setShowModal(false);
-                      setNewPuesto("");
-                      setNewEmpleado("");
-                      setNewPlanta("");
-                    }}
-                  >
-                    Cancelar
-                  </button>
+                  <div className="botones-modal">
+                    <button className="modal-crear" onClick={handleCreate}>
+                      Crear
+                    </button>
+                    <button
+                      className="modal-cancelar"
+                      onClick={() => {
+                        setShowModal(false);
+                        setNewPuesto("");
+                        setNewEmpleado("");
+                        setNewPlanta("");
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -286,14 +292,24 @@ function Personal() {
           />
           <div className="botones-mapa">
             <button
-              className="controlador-imagen"
-              onClick={() => setSelectedImage(Plano_P1)}
+              className={`controlador-imagen ${
+                activeButton === "PlantaBaja" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveButton("PlantaBaja");
+                setSelectedImage(Plano_P1);
+              }}
             >
               Planta Baja
             </button>
             <button
-              className="controlador-imagen"
-              onClick={() => setSelectedImage(Plano_P0)}
+              className={`controlador-imagen ${
+                activeButton === "Laboratorio" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveButton("Laboratorio");
+                setSelectedImage(Plano_P0);
+              }}
             >
               Laboratorio
             </button>

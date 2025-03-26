@@ -132,7 +132,9 @@ function DeviceInfo() {
     const currentValues = getValues();
 
     const relevantData = Object.keys(currentValues)
-      .filter((key) => deviceData.deviceFields.some((field) => field.name === key))
+      .filter((key) =>
+        deviceData.deviceFields.some((field) => field.name === key)
+      )
       .reduce((obj, key) => {
         obj[key] = currentValues[key];
         return obj;
@@ -153,7 +155,10 @@ function DeviceInfo() {
     const sortedRelevantDataStr = sortObject(relevantDataStr);
     const sortedInitialDataFlat = sortObject(initialDataFlat);
 
-    if (JSON.stringify(sortedRelevantDataStr) === JSON.stringify(sortedInitialDataFlat)) {
+    if (
+      JSON.stringify(sortedRelevantDataStr) ===
+      JSON.stringify(sortedInitialDataFlat)
+    ) {
       alert("No se han realizado cambios.");
       return;
     }
@@ -171,7 +176,9 @@ function DeviceInfo() {
 
   const handleDelete = async (event) => {
     event.preventDefault();
-    if (window.confirm("¿Estás seguro de que quieres eliminar este dispositivo?")) {
+    if (
+      window.confirm("¿Estás seguro de que quieres eliminar este dispositivo?")
+    ) {
       await deleteDevice(deviceType, deviceId);
       navigate("/home", { replace: true });
     }
@@ -207,7 +214,9 @@ function DeviceInfo() {
                 >
                   <div className="cell">
                     <label
-                      className={`form-label ${errors[field.name] ? "error" : ""}`}
+                      className={`form-label ${
+                        errors[field.name] ? "error" : ""
+                      }`}
                     >
                       {field.name}
                     </label>
@@ -315,7 +324,9 @@ function DeviceInfo() {
                 >
                   <div className="cell">
                     <label
-                      className={`form-label ${errors[field.name] ? "error" : ""}`}
+                      className={`form-label ${
+                        errors[field.name] ? "error" : ""
+                      }`}
                     >
                       {field.name}
                     </label>
@@ -430,10 +441,7 @@ function DeviceInfo() {
         </div>
       </form>
 
-      <button
-        className="modal-button"
-        onClick={() => setIsModalOpen(true)}
-      >
+      <button className="modal-button" onClick={() => setIsModalOpen(true)}>
         Añadir registro al histórico
       </button>
 

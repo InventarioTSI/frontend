@@ -1,19 +1,26 @@
-// Componente de paginación que maneja la navegación entre las páginas de una lista de elementos.
-
 import React from "react";
 import "./Pagination.css";
 
-export default function Pagination({ currentPage, totalPages, onPageChange }) {
+export default function Pagination({
+  currentPage,
+  totalItems,
+  itemsPerPage,
+  onPageChange,
+  hasMoreData,
+}) {
+  // Calcular el número real de páginas
+  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+
   // Función para manejar el cambio a la página anterior
   const handlePrevious = () => {
-    if (currentPage > 1) { // Asegura que no se navegue antes de la primera página
+    if (currentPage > 1) {
       onPageChange(currentPage - 1);
     }
   };
 
-  // Función para manejar el cambio a la siguiente página
+  // Función para manejar el cambio a la página siguiente
   const handleNext = () => {
-    if (currentPage < totalPages) { // Asegura que no se navegue después de la última página
+    if (currentPage < totalPages && hasMoreData) {
       onPageChange(currentPage + 1);
     }
   };
@@ -34,7 +41,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
       </div>
       <button
         onClick={handleNext}
-        disabled={currentPage === totalPages}
+        disabled={currentPage === totalPages || !hasMoreData}
         className="next-button"
       >
         Siguiente

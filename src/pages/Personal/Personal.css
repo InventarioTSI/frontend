@@ -13,7 +13,7 @@
 }
 
 .left-section {
-    padding-left: 40px;
+    padding-left: 10px;
     padding-right: 10px;
     width: 50%;
 }
@@ -25,14 +25,14 @@
 }
 .divGestion{
     
-    margin-left: 40px;
+    margin-left: 10px;
 }
 
 .personal-select {
     border: 2px solid black;
     border-radius: 5px;
     display: block;
-    width: 411px;
+    width: 500px;
     padding: 5px;
     margin-bottom: 10px;
     font-size: 16px;
@@ -145,12 +145,12 @@
     
     
     margin-top: 30px;
-    margin-left: 140px;
+    margin-left: 178px;
 }
 .boton-volver {
     border: 2px solid #ab1100;
     background-color: #ff4b37;
-    border-radius: 2px;
+    border-radius: 5px;
     color: white;
     width: 35%;
     height: 45px;
@@ -175,18 +175,10 @@
     align-items: center;
 }
 
-.modal-content {
-    background-color: white;
-    border-radius: 10px;
-    width: 50%;
-    max-width: 500px;
-    align-items: center;
-    text-align: center;
-}
+
 
 .modal-h2 {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    
     font-size: 20px;
 }
 
@@ -198,14 +190,20 @@
     margin-top: 10px;
     padding-left: 5px;
 }
-
+.botones-modal{
+    margin-top: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    
+}
 .modal-crear {
     border: 2px solid #518b03;
     background-color: #72C00D;
-    border-radius: 2px;
+    border-radius: 5px;
     color: white;
-    width: 240px;
-    margin-right: 5px !important;
+    padding: 5px;
 }
 
 .modal-crear:hover {
@@ -216,12 +214,11 @@
 .modal-cancelar {
     border: 2px solid #ab1100;
     background-color: #ff4b37;
-    border-radius: 2px;
+    border-radius: 5px;
     color: white;
-    width: 240px;
-    margin-right: 5px !important;
-    margin-top: -5px !important;
-    margin-bottom: 20px !important;
+    width: 100px;
+    padding: 5px;
+    
 }
 
 .modal-cancelar:hover {
@@ -261,4 +258,8 @@
     background-color: #518B03;
     border: 2px solid #72C00D;
 }
+.controlador-imagen.active {
+    background-color: #3a5d0c; /* Mismo color que el hover */
+    border: 2px solid #72C00D;
+  }
 
