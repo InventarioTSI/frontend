@@ -13,7 +13,7 @@ import QRCode from "react-qr-code";
 import "./DeviceFormPage.css";
 
 // Componente principal para la página de formulario de dispositivo
-export default function DeviceFormPage({ deviceType }) {
+export default function DeviceFormPage({ deviceType, onSuccess }) {
   const { deviceId } = useParams(); // Obtener el ID del dispositivo desde los parámetros de la URL
   const [qrValues, setQrValues] = useState(null); // Estado para los valores del código QR
   const [employees, setEmployees] = useState([]); // Estado para la lista de empleados
@@ -26,7 +26,7 @@ export default function DeviceFormPage({ deviceType }) {
     formState: { errors },
     reset,
     setValue,
-    watch
+    watch,
   } = useForm();
 
   // Obtener funciones y datos del contexto de dispositivo
@@ -63,11 +63,10 @@ export default function DeviceFormPage({ deviceType }) {
 
         // Establecer valores del formulario
         if (result?.deviceFields) {
-          result.deviceFields.forEach(field => {
+          result.deviceFields.forEach((field) => {
             setValue(field.name, field.value);
           });
         }
-
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -87,7 +86,9 @@ export default function DeviceFormPage({ deviceType }) {
     try {
       // Filtrar datos relevantes del formulario
       const relevantData = Object.keys(data)
-        .filter(key => formData.deviceFields.some(field => field.name === key))
+        .filter((key) =>
+          formData.deviceFields.some((field) => field.name === key)
+        )
         .reduce((obj, key) => {
           obj[key] = data[key];
           return obj;
@@ -100,7 +101,7 @@ export default function DeviceFormPage({ deviceType }) {
 
         // Forzar recarga de los datos
         const updatedDevice = await getOneDevice(deviceType, deviceId);
-        updatedDevice.deviceFields.forEach(field => {
+        updatedDevice.deviceFields.forEach((field) => {
           setValue(field.name, field.value);
         });
       } else {
@@ -108,9 +109,14 @@ export default function DeviceFormPage({ deviceType }) {
         const deviceCreated = await createDevice(deviceType, relevantData);
         setQrValues({
           ...deviceCreated.data.data.deviceData,
-          Referencia: data.Referencia
+          Referencia: data.Referencia,
         });
         reset();
+
+        // Redirigir al apartado "Home" si se pasa la función onSuccess
+        if (onSuccess) {
+          onSuccess();
+        }
       }
     } catch (error) {
       console.error("Error saving device:", error);
@@ -120,15 +126,21 @@ export default function DeviceFormPage({ deviceType }) {
   // Función para renderizar campos dinámicamente
   const renderField = (field) => {
     const commonProps = {
-      className: `form-input ${errors[field.name] ? 'error' : ''}`,
+      className: `form-input ${errors[field.name] ? "error" : ""}`,
       ...register(field.name, {
-        required: ['Modelo', 'AñoCompra', 'PuestosTrabajo', 'Estado', 'Referencia'].includes(field.name),
-        pattern: field.name === 'Pulgadas' ? /^\d+(\.\d{1,2})?$/ : undefined
-      })
+        required: [
+          "Modelo",
+          "AñoCompra",
+          "PuestosTrabajo",
+          "Estado",
+          "Referencia",
+        ].includes(field.name),
+        pattern: field.name === "Pulgadas" ? /^\d+(\.\d{1,2})?$/ : undefined,
+      }),
     };
 
     switch (field.name) {
-      case 'PuestosTrabajo':
+      case "PuestosTrabajo":
         return (
           <select {...commonProps}>
             <option value="">Seleccione un puesto</option>
@@ -139,9 +151,9 @@ export default function DeviceFormPage({ deviceType }) {
             ))}
           </select>
         );
-      case 'AñoCompra':
+      case "AñoCompra":
         return <input type="date" {...commonProps} />;
-      case 'Estado':
+      case "Estado":
         return (
           <select {...commonProps}>
             <option value="">Seleccione un estado</option>
@@ -150,17 +162,21 @@ export default function DeviceFormPage({ deviceType }) {
             <option value="No usable">No usable</option>
             <option value="De baja">De baja</option>
             <option value="Asignación Temporal">Asignación Temporal</option>
-            <option value="Pendiente actualizar datos">Pendiente actualizar datos</option>
+            <option value="Pendiente actualizar datos">
+              Pendiente actualizar datos
+            </option>
           </select>
         );
-      case 'Pulgadas':
+      case "Pulgadas":
         return <input type="number" step="0.1" {...commonProps} />;
       default:
-        return <input
-          type={field.type}
-          {...commonProps}
-          key={`${deviceId}-${field.name}`} // Clave única para forzar rerender
-        />;
+        return (
+          <input
+            type={field.type}
+            {...commonProps}
+            key={`${deviceId}-${field.name}`} // Clave única para forzar rerender
+          />
+        );
     }
   };
 
@@ -177,17 +193,29 @@ export default function DeviceFormPage({ deviceType }) {
       <form onSubmit={onSubmit} className="form">
         <div className="form-fields">
           {formData?.deviceFields
-            ?.filter(field => field.name !== "Id")
-            ?.reduce((columns, field, index) => {
-              const columnIndex = index % 2;
-              columns[columnIndex].push(field);
-              return columns;
-            }, [[], []])
+            ?.filter((field) => field.name !== "Id")
+            ?.reduce(
+              (columns, field, index) => {
+                const columnIndex = index % 2;
+                columns[columnIndex].push(field);
+                return columns;
+              },
+              [[], []]
+            )
             ?.map((columnFields, colIndex) => (
               <div key={colIndex} className="column">
                 {columnFields.map((field) => (
-                  <div key={`${deviceId}-${field.name}`} className={`form-field ${errors[field.name] ? 'error' : ''}`}>
-                    <label className={`form-label ${errors[field.name] ? 'error' : ''}`}>
+                  <div
+                    key={`${deviceId}-${field.name}`}
+                    className={`form-field ${
+                      errors[field.name] ? "error" : ""
+                    }`}
+                  >
+                    <label
+                      className={`form-label ${
+                        errors[field.name] ? "error" : ""
+                      }`}
+                    >
                       {field.name}
                     </label>
                     {errors[field.name] && (
@@ -222,21 +250,29 @@ export default function DeviceFormPage({ deviceType }) {
             viewBox="0 0 256 256"
           />
           <div className="div-ref">{qrValues.Referencia}</div>
-          <button onClick={() => {
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
+          <button
+            onClick={() => {
+              const printWindow = window.open("", "_blank");
+              printWindow.document.write(`
               <html>
                 <body style="text-align: center;">
                   <div style="margin: 0 auto;">
-                    ${document.querySelector('.qr-section > svg')?.outerHTML || ''}
-                    <p style="font-size: 32px; font-weight: bold;">${qrValues.Referencia}</p>
+                    ${
+                      document.querySelector(".qr-section > svg")?.outerHTML ||
+                      ""
+                    }
+                    <p style="font-size: 32px; font-weight: bold;">${
+                      qrValues.Referencia
+                    }</p>
                   </div>
                 </body>
               </html>
             `);
-            printWindow.document.close();
-            printWindow.print();
-          }} className="print-button">
+              printWindow.document.close();
+              printWindow.print();
+            }}
+            className="print-button"
+          >
             Imprimir QR
           </button>
         </div>

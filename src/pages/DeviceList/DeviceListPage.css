@@ -78,8 +78,9 @@ button {
   background-color: #ff4b37;
   color: #fff;
   padding: 0.5rem 1rem;
-  width: 180px;
-  border-radius: 2px;
+  width: auto;
+  padding: 8px;
+  border-radius: 5px;
 }
 
 .boton-cancelar:hover{
@@ -91,7 +92,7 @@ button {
 }
 
 .boton-descarga{
-  width: 98% !important;
+  width: 40% !important;
   margin-right: -10px !important;
   border: 2px solid #b46c00;
   background-color: #ff8400;

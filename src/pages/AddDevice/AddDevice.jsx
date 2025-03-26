@@ -4,7 +4,8 @@ muestra un formulario dinámico para la entrada de detalles del dispositivo sele
 */
 
 import React, { useState } from "react";
-import DeviceForm from "./DeviceFormPage";
+import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import DeviceFormPage from "./DeviceFormPage";
 import "./AddDevice.css";
 
 // Lista de dispositivos disponibles. Podría cambiarse por datos provenientes de una API en el futuro.
@@ -31,10 +32,16 @@ const devices = [
 export default function AddDevice() {
   // Estado para gestionar el dispositivo seleccionado por el usuario
   const [selectedDevice, setSelectedDevice] = useState("");
+  const navigate = useNavigate(); // Hook para redirigir
 
   // Maneja el cambio de selección en el dropdown de dispositivos
   const handleDeviceChange = (event) => {
     setSelectedDevice(event.target.value);
+  };
+
+  // Función para manejar el éxito al añadir un dispositivo
+  const handleAddDeviceSuccess = () => {
+    navigate("/home"); // Redirigir al apartado "Home"
   };
 
   return (
@@ -52,7 +59,12 @@ export default function AddDevice() {
       </div>
 
       {/* Si hay un dispositivo seleccionado, muestra el formulario del dispositivo */}
-      {selectedDevice && <DeviceForm deviceType={selectedDevice} />}
+      {selectedDevice && (
+        <DeviceFormPage
+          deviceType={selectedDevice}
+          onSuccess={handleAddDeviceSuccess} // Pasar la función de redirección
+        />
+      )}
     </div>
   );
 }
