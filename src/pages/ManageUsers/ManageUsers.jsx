@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ManageUsers.css';
 
@@ -7,6 +7,29 @@ const ManageUsers = () => {
     const [users, setUsers] = useState([]); // Estado para almacenar los usuarios
     const [loading, setLoading] = useState(true); // Estado para manejar la carga
     const [error, setError] = useState(null); // Estado para manejar errores
+    const navigate = useNavigate(); // Hook para redirigir
+
+    // Verificar si el usuario es administrador
+    useEffect(() => {
+        const checkAdmin = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:3000/api/users/auth/check-admin', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                if (!response.data.isAdmin) {
+                    navigate('/home'); // Redirige si no es administrador
+                }
+            } catch (err) {
+                console.error('Error al verificar permisos de administrador:', err.response || err);
+                navigate('/home'); // Redirige si hay un error
+            }
+        };
+
+        checkAdmin();
+    }, [navigate]);
 
     // Función para obtener los usuarios desde el backend
     useEffect(() => {

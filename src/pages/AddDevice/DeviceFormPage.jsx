@@ -107,6 +107,8 @@ export default function DeviceFormPage({ deviceType, onSuccess }) {
       } else {
         // Crear nuevo dispositivo
         const deviceCreated = await createDevice(deviceType, relevantData);
+        navigate("/home", { replace: true });
+        alert("Dispositivo creado con éxito");
         setQrValues({
           ...deviceCreated.data.data.deviceData,
           Referencia: data.Referencia,

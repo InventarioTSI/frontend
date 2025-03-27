@@ -119,7 +119,6 @@ export function DeviceProvider({ children }) {
       await deleteDeviceRequest(deviceType, deviceId);
     // Si la actualización es exitosa, limpia el estado de errores (si había alguno previo)
     setErrors(null); // Limpiar cualquier error previo
-    return response.data; // Retorna los datos de la respuesta
   } catch (error) {
       // Si el error es por permisos denegados (error 403), no lo ponemos en los errores
       if (error.response && error.response.status === 403) {
