@@ -2,7 +2,7 @@ import Pagination from "../../components/Pagination/Pagination";
 import Template from "../../components/Template";
 import { useDevice } from "../../context/DeviceContext";
 import { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom";
 import "./DeviceListPage.css";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import axios from "axios";
@@ -42,7 +42,7 @@ function DeviceListPage() {
         // Actualizar los estados con los datos recibidos
         setDevices(result.devices);
         setEmployees(result.employees);
-        setTotalDevices(result.total); // Actualizar el total de dispositivos
+        setTotalDevices(result.total); // Total de dispositivos desde la API
       } catch (error) {
         if (axios.isCancel(error)) {
           console.log("Request canceled:", error.message);
@@ -69,9 +69,7 @@ function DeviceListPage() {
     return employees.find((employee) => employee.Puesto === puestoTrabajo);
   };
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [limit, searchTerm, stateFilter, employeeFilter]);
+  const totalPages = Math.ceil(totalDevices / limit); // Total de páginas basado en el total de dispositivos
 
   if (errors) return <div>{errors.data}</div>;
 
@@ -212,7 +210,7 @@ function DeviceListPage() {
           totalItems={totalDevices}
           itemsPerPage={limit}
           onPageChange={handlePageChange}
-          hasMoreData={devices.length === limit}
+          hasMoreData={currentPage < totalPages}
         />
       </div>
 

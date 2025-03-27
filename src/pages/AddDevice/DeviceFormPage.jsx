@@ -50,9 +50,12 @@ export default function DeviceFormPage({ deviceType, onSuccess }) {
         setQrValues(null);
         reset();
 
-        // Cargar empleados
+        // Cargar empleados y ordenarlos alfabéticamente por nombre
         const devicesResult = await getAllDevices(1, 10, "", "", "");
-        setEmployees(devicesResult.employees);
+        const sortedEmployees = devicesResult.employees.sort((a, b) =>
+          a.Empleado.localeCompare(b.Empleado)
+        );
+        setEmployees(sortedEmployees);
 
         // Cargar datos del dispositivo o formulario vacío
         const result = deviceId
