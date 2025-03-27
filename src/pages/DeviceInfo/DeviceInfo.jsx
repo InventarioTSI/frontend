@@ -179,8 +179,13 @@ function DeviceInfo() {
     if (
       window.confirm("¿Estás seguro de que quieres eliminar este dispositivo?")
     ) {
-      await deleteDevice(deviceType, deviceId);
-      navigate("/home", { replace: true });
+      navigate("/DeviceList", { replace: true }); // Redirige inmediatamente
+      try {
+        await deleteDevice(deviceType, deviceId);
+      } catch (error) {
+        console.error("Error al eliminar el dispositivo:", error);
+        alert("Hubo un problema al eliminar el dispositivo. Por favor, inténtalo de nuevo.");
+      }
     }
   };
 
@@ -214,9 +219,8 @@ function DeviceInfo() {
                 >
                   <div className="cell">
                     <label
-                      className={`form-label ${
-                        errors[field.name] ? "error" : ""
-                      }`}
+                      className={`form-label ${errors[field.name] ? "error" : ""
+                        }`}
                     >
                       {field.name}
                     </label>
@@ -227,9 +231,8 @@ function DeviceInfo() {
                     )}
                     {field.name === "PuestosTrabajo" ? (
                       <select
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
+                        className={`form-input ${errors[field.name] ? "error" : ""
+                          }`}
                         name={field.name}
                         {...register(field.name)}
                         value={selectedValue}
@@ -251,9 +254,8 @@ function DeviceInfo() {
                       </select>
                     ) : field.name === "AñoCompra" ? (
                       <input
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
+                        className={`form-input ${errors[field.name] ? "error" : ""
+                          }`}
                         type="date"
                         name={field.name}
                         defaultValue={field.value}
@@ -261,9 +263,8 @@ function DeviceInfo() {
                       />
                     ) : field.name === "Estado" ? (
                       <select
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
+                        className={`form-input ${errors[field.name] ? "error" : ""
+                          }`}
                         defaultValue={field.value}
                         name={field.name}
                         {...register(field.name, { required: true })}
@@ -281,9 +282,8 @@ function DeviceInfo() {
                       </select>
                     ) : field.name === "Pulgadas" ? (
                       <input
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
+                        className={`form-input ${errors[field.name] ? "error" : ""
+                          }`}
                         type="number"
                         step="0.1"
                         name={field.name}
@@ -294,9 +294,8 @@ function DeviceInfo() {
                       />
                     ) : (
                       <input
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
+                        className={`form-input ${errors[field.name] ? "error" : ""
+                          }`}
                         type={field.type}
                         name={field.name}
                         defaultValue={field.value}
@@ -324,9 +323,8 @@ function DeviceInfo() {
                 >
                   <div className="cell">
                     <label
-                      className={`form-label ${
-                        errors[field.name] ? "error" : ""
-                      }`}
+                      className={`form-label ${errors[field.name] ? "error" : ""
+                        }`}
                     >
                       {field.name}
                     </label>
@@ -337,9 +335,8 @@ function DeviceInfo() {
                     )}
                     {field.name === "PuestosTrabajo" ? (
                       <select
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
+                        className={`form-input ${errors[field.name] ? "error" : ""
+                          }`}
                         name={field.name}
                         {...register(field.name)}
                         value={selectedValue}
@@ -361,9 +358,8 @@ function DeviceInfo() {
                       </select>
                     ) : field.name === "AñoCompra" ? (
                       <input
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
+                        className={`form-input ${errors[field.name] ? "error" : ""
+                          }`}
                         type="date"
                         name={field.name}
                         defaultValue={field.value}
@@ -371,9 +367,8 @@ function DeviceInfo() {
                       />
                     ) : field.name === "Estado" ? (
                       <select
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
+                        className={`form-input ${errors[field.name] ? "error" : ""
+                          }`}
                         name={field.name}
                         defaultValue={field.value}
                         {...register(field.name, { required: true })}
@@ -391,9 +386,8 @@ function DeviceInfo() {
                       </select>
                     ) : field.name === "Pulgadas" ? (
                       <input
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
+                        className={`form-input ${errors[field.name] ? "error" : ""
+                          }`}
                         type="number"
                         step="0.1"
                         name={field.name}
@@ -405,9 +399,8 @@ function DeviceInfo() {
                       />
                     ) : (
                       <input
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
+                        className={`form-input ${errors[field.name] ? "error" : ""
+                          }`}
                         type={field.type}
                         name={field.name}
                         defaultValue={field.value}
@@ -434,10 +427,15 @@ function DeviceInfo() {
           >
             Volver al menú
           </button>
-          <button className="submit-button">Actualizar</button>
-          <button onClick={handleDelete} className="delete-button">
-            Eliminar
-          </button>
+          {user.role === "Admin" && (
+          <div>
+            <button className="submit-button">Actualizar</button>
+            <button onClick={handleDelete} className="delete-button">
+              Eliminar
+            </button>
+          </div>
+          )}
+
         </div>
       </form>
 
@@ -451,18 +449,16 @@ function DeviceInfo() {
             <label className="label-historico">
               Observación
               <input
-                className={`input-historico ${
-                  errorsHistoric.Observacion ? "error" : ""
-                }`}
+                className={`input-historico ${errorsHistoric.Observacion ? "error" : ""
+                  }`}
                 {...registerHistoric("Observacion", { required: true })}
               />
             </label>
             <label className="label-historico">
               Usuario asignado
               <input
-                className={`input-historico ${
-                  errorsHistoric.UsuarioAsignado ? "error" : ""
-                }`}
+                className={`input-historico ${errorsHistoric.UsuarioAsignado ? "error" : ""
+                  }`}
                 {...registerHistoric("UsuarioAsignado")}
               />
             </label>

@@ -105,16 +105,12 @@ export default function DeviceFormPage({ deviceType, onSuccess }) {
       } else {
         // Crear nuevo dispositivo
         const deviceCreated = await createDevice(deviceType, relevantData);
-        console.log("Respuesta de createDevice:", deviceCreated);
-
-        if (deviceCreated?.data?.data?.deviceData) {
-          setQrValues({
-            ...deviceCreated.data.data.deviceData,
-            Referencia: data.Referencia,
-          });
-        } else {
-          console.error("La respuesta de la API no contiene deviceData");
-        }
+        navigate("/home", { replace: true });
+        alert("Dispositivo creado con éxito");
+        setQrValues({
+          ...deviceCreated.data.data.deviceData,
+          Referencia: data.Referencia,
+        });
 
         reset();
 
