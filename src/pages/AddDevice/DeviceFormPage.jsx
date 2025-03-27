@@ -12,7 +12,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import QRCode from "react-qr-code";
 import "./DeviceFormPage.css";
 
-// Componente principal para la página de formulario de dispositivo
 export default function DeviceFormPage({ deviceType, onSuccess }) {
   const { deviceId } = useParams(); // Obtener el ID del dispositivo desde los parámetros de la URL
   const [qrValues, setQrValues] = useState(null); // Estado para los valores del código QR
@@ -26,7 +25,6 @@ export default function DeviceFormPage({ deviceType, onSuccess }) {
     formState: { errors },
     reset,
     setValue,
-    watch,
   } = useForm();
 
   // Obtener funciones y datos del contexto de dispositivo
@@ -113,7 +111,11 @@ export default function DeviceFormPage({ deviceType, onSuccess }) {
           ...deviceCreated.data.data.deviceData,
           Referencia: data.Referencia,
         });
+
         reset();
+
+        // Mostrar alerta de éxito
+        alert("Dispositivo creado correctamente");
 
         // Redirigir al apartado "Home" si se pasa la función onSuccess
         if (onSuccess) {
@@ -121,7 +123,7 @@ export default function DeviceFormPage({ deviceType, onSuccess }) {
         }
       }
     } catch (error) {
-      console.error("Error saving device:", error);
+      console.error("Error al guardar el dispositivo:", error);
     }
   });
 
