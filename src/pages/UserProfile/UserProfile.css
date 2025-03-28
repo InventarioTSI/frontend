@@ -1,0 +1,41 @@
+.user-profile {
+  padding: 20px;
+  text-align: center;
+}
+
+.titulo {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.profile-table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 50%;
+}
+
+.profile-table th,
+.profile-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.profile-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.boton-cancelar {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.boton-cancelar:hover {
+  background-color: #d32f2f;
+}
