@@ -56,10 +56,16 @@ const ManageUsers = () => {
         const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar este usuario?');
         if (confirmDelete) {
             try {
-                await axios.delete(`http://localhost:3000/api/users/${userId}`); 
+                const token = localStorage.getItem('token'); // Obtén el token del localStorage
+                await axios.delete(`http://localhost:3000/api/users/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Incluye el token en los encabezados
+                    },
+                });
                 setUsers(users.filter((user) => user.id !== userId)); // Elimina el usuario del estado
                 alert('Usuario eliminado correctamente');
             } catch (err) {
+                console.error('Error al eliminar el usuario:', err.response || err);
                 alert('Error al eliminar el usuario');
             }
         }
@@ -76,6 +82,9 @@ const ManageUsers = () => {
     return (
         <div className="manage-users">
             <h1 className='titulo'>Administrar Usuarios</h1>
+            <button className="add-user-button" onClick={() => navigate('/admin/users/add')}>
+                Añadir Nuevo Usuario
+            </button>
             <table className="users-table">
                 <thead>
                     <tr>

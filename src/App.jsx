@@ -13,6 +13,8 @@ import DeviceInfo from "./pages/DeviceInfo/DeviceInfo";
 import Personal from "./pages/Personal/Personal";
 import ManageUsers from "./pages/ManageUsers/ManageUsers";
 import UserProfile from "./pages/UserProfile/UserProfile"; // Importar el componente actualizado
+import AddUsers from "./pages/ManageUsers/AddUsers/AddUsers";
+
 
 export default function App() {
   return (
@@ -31,8 +33,8 @@ export default function App() {
             <Route path="/DeviceList" element={<DeviceListPage />} />
             <Route path="/Personal" element={<Personal />} />
             <Route path="/admin/users" element={<ManageUsers />} />
-            <Route path="/perfil" element={<UserProfile />} />{" "}
-            {/* Ruta actualizada */}
+            <Route path="/perfil" element={<UserProfile />} />
+            <Route path="/admin/users/add" element={<AddUsers />} />
           </Route>
           <Route path="*" element={<LoginPage />} />
         </Routes>

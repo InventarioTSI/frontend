@@ -2,7 +2,6 @@
   font-size: 38px;
   color: #72C00D;
   font-weight: bold;
-  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -22,6 +21,9 @@
 .manage-users {
   padding: 20px;
   font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
@@ -84,12 +86,12 @@ h1 {
 }
 
 .edit-button {
-  background-color: #4CAF50;
+  background-color: #FFC107; 
   color: white;
 }
 
 .edit-button:hover {
-  background-color: #45a049;
+  background-color: #FFA000;
 }
 
 .delete-button {
@@ -99,4 +101,20 @@ h1 {
 
 .delete-button:hover {
   background-color: #d32f2f;
+}
+
+.add-user-button {
+  display: block; 
+  padding: 8px 16px;
+  width: 300px;
+  background-color: #4CAF50; 
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px; 
+  transition: background-color 0.3s ease;
+}
+
+.add-user-button:hover {
+  background-color: #45a049; 
 }
