@@ -9,9 +9,10 @@
 }
 
 .profile-table {
-  margin: 0 auto;
+  margin: 40px auto; /* Agregado un margen superior para mover la tabla más abajo */
   border-collapse: collapse;
   width: 50%;
+  margin-top: 80px;
 }
 
 .profile-table th,
