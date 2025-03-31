@@ -3,10 +3,11 @@ Componente para agregar un dispositivo. Permite seleccionar un tipo de dispositi
 muestra un formulario dinámico para la entrada de detalles del dispositivo seleccionado.
 */
 
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import DeviceFormPage from "./DeviceFormPage";
 import "./AddDevice.css";
+import axios from "axios";
 
 // Lista de dispositivos disponibles. Podría cambiarse por datos provenientes de una API en el futuro.
 const devices = [
@@ -32,7 +33,8 @@ const devices = [
 export default function AddDevice() {
   // Estado para gestionar el dispositivo seleccionado por el usuario
   const [selectedDevice, setSelectedDevice] = useState("");
-  const navigate = useNavigate(); // Hook para redirigir
+  const [isAdmin, setIsAdmin] = useState(false); 
+  const navigate = useNavigate();
 
   // Maneja el cambio de selección en el dropdown de dispositivos
   const handleDeviceChange = (event) => {
@@ -43,6 +45,34 @@ export default function AddDevice() {
   const handleAddDeviceSuccess = () => {
     navigate("/home"); // Redirigir al apartado "Home"
   };
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Obtén el token del localStorage
+        const response = await axios.get("http://localhost:3000/api/users/auth/check-admin", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Incluye el token en los encabezados
+          },
+        });
+
+        if (!response.data.isAdmin) {
+          navigate("/home"); // Redirige si no es administrador
+        } else {
+          setIsAdmin(true); // Actualiza el estado si es administrador
+        }
+      } catch (err) {
+        console.error("Error al verificar permisos de administrador:", err.response || err);
+        navigate("/home"); // Redirige si hay un error
+      }
+    };
+
+    checkAdmin();
+  }, [navigate]);
+
+  if (!isAdmin) {
+    return null; // No renderiza nada mientras verifica el rol
+  }
 
   return (
     <div className="device-page">
