@@ -35,15 +35,15 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setLoading(false);
     } catch (error) {
-      setErrors(error.response.data);
+      setErrors(error.response?.data || "Error al iniciar sesión");
       setLoading(false);
     }
   };
 
   // Función para cerrar sesión: elimina el token y restablece el estado de autenticación
   const signout = () => {
-    localStorage.removeItem("token");// Elimina el token del almacenamiento local
-    setUser(null);// Restablece el estado del usuario y la autenticación
+    localStorage.removeItem("token"); // Elimina el token del almacenamiento local
+    setUser(null); // Restablece el estado del usuario y la autenticación
     setIsAuthenticated(false);
   };
 
@@ -57,11 +57,14 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
           setLoading(false);
         })
-        .catch((error) => { // Si el token no es válido, elimina el token y actualiza los errores
+        .catch((error) => {
+          // Si el token no es válido, elimina el token y actualiza los errores
           setLoading(false);
           localStorage.removeItem("token");
-          setErrors(error.response.data);
+          setErrors(error.response?.data || "Token inválido");
         });
+    } else {
+      setLoading(false); // Si no hay token, desactiva el estado de carga
     }
   }, []);
 
@@ -87,7 +90,8 @@ export const AuthProvider = ({ children }) => {
         loading,
       }}
     >
-      {children} {/* Renderiza los componentes hijos que están dentro del proveedor */}
+      {children}{" "}
+      {/* Renderiza los componentes hijos que están dentro del proveedor */}
     </AuthContext.Provider>
   );
 };
