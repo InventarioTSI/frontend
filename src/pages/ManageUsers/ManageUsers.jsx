@@ -7,6 +7,8 @@ const ManageUsers = () => {
     const [users, setUsers] = useState([]); // Estado para almacenar los usuarios
     const [loading, setLoading] = useState(true); // Estado para manejar la carga
     const [error, setError] = useState(null); // Estado para manejar errores
+    const [selectedUser, setSelectedUser] = useState(null); // Usuario seleccionado para editar
+    const [isDialogOpen, setIsDialogOpen] = useState(false); // Estado para manejar el diálogo
     const navigate = useNavigate(); // Hook para redirigir
 
     // Verificar si el usuario es administrador
@@ -48,8 +50,37 @@ const ManageUsers = () => {
     }, []);
 
     const handleEdit = (userId) => {
-        alert(`Editar usuario con ID: ${userId}`);
-        // Aquí puedes redirigir a un formulario de edición o abrir un modal
+        const user = users.find((u) => u.id === userId);
+        setSelectedUser(user); // Establece el usuario seleccionado
+        setIsDialogOpen(true); // Abre el diálogo
+    };
+
+    const handleDialogClose = () => {
+        setIsDialogOpen(false); // Cierra el diálogo
+        setSelectedUser(null); // Limpia el usuario seleccionado
+    };
+
+    const handleDialogSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+            await axios.put(`http://localhost:3000/api/users/${selectedUser.id}`, selectedUser, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setUsers(users.map((user) => (user.id === selectedUser.id ? selectedUser : user))); // Actualiza el usuario en el estado
+            alert('Usuario actualizado correctamente');
+            handleDialogClose(); // Cierra el diálogo
+        } catch (err) {
+            console.error('Error al actualizar el usuario:', err.response || err);
+            alert('Error al actualizar el usuario');
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setSelectedUser({ ...selectedUser, [name]: value });
     };
 
     const handleDelete = async (userId) => {
@@ -115,6 +146,47 @@ const ManageUsers = () => {
             <Link to="/home">
                 <button className="boton-cancelar">Volver al menú</button>
             </Link>
+
+            {/* Diálogo para editar usuario */}
+            {isDialogOpen && selectedUser && (
+                <div className="dialog-overlay">
+                    <div className="dialog">
+                        <h1 className='titulo'>Editar Usuario</h1>
+                        <form onSubmit={handleDialogSubmit}>
+                            <div className="form-group">
+                                <label htmlFor="userName">Nombre de Usuario:</label>
+                                <input
+                                    type="text"
+                                    id="userName"
+                                    name="userName"
+                                    value={selectedUser.userName}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="role">Rol:</label>
+                                <select
+                                    id="role"
+                                    name="role"
+                                    value={selectedUser.role}
+                                    onChange={handleInputChange}
+                                    required
+                                >
+                                    <option value="Admin">Administrador</option>
+                                    <option value="Lectura">Lector</option>
+                                </select>
+                            </div>
+                            <div className="dialog-buttons">
+                                <button type="submit" className="submit-button">Guardar Cambios</button>
+                                <button type="button" className="cancel-button" onClick={handleDialogClose}>
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

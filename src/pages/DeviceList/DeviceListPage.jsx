@@ -98,7 +98,7 @@ function DeviceListPage() {
             {employees
               .sort((a, b) => a.Empleado.localeCompare(b.Empleado))
               .map((employee) => (
-                <option key={employee.Id} value={employee.Puesto}>
+                <option key={`${employee.Id}-${employee.Puesto}`} value={employee.Puesto}>
                   {employee.Empleado} - {employee.Puesto}
                 </option>
               ))}
@@ -161,7 +161,7 @@ function DeviceListPage() {
               let employee = findEmployee(device.PuestosTrabajo);
 
               return (
-                <tr key={`${device.Id}-${device.Tipo}`}>
+                <tr key={`${device.Id}-${device.Referencia}`}>
                   <td>{device.Tipo}</td>
                   <td>{device.Referencia}</td>
                   <td>

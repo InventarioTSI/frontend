@@ -5,7 +5,7 @@
 */
 
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Importación de las funciones para interactuar con la API relacionada con los puestos de trabajo
 import {
@@ -20,6 +20,7 @@ import Plano_P0 from "../../imagenes/Plano_P0.png";
 import Plano_P1 from "../../imagenes/Plano_P1.png";
 
 import "./Personal.css";
+import axios from "axios";
 
 function Personal() {
   // Definición de los estados necesarios para manejar la selección de puestos, empleados, planos y mapa
@@ -38,6 +39,8 @@ function Personal() {
   const [iPlanta, setIPlanta] = useState("");
 
   const [activeButton, setActiveButton] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
 
   // Efecto para cargar los datos de los empleados al cargar el componente
   useEffect(() => {
@@ -159,6 +162,34 @@ function Personal() {
       }
     }
   };
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Obtén el token del localStorage
+        const response = await axios.get("http://localhost:3000/api/users/auth/check-admin", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Incluye el token en los encabezados
+          },
+        });
+
+        if (!response.data.isAdmin) {
+          navigate("/home"); // Redirige si no es administrador
+        } else {
+          setIsAdmin(true); // Actualiza el estado si es administrador
+        }
+      } catch (err) {
+        console.error("Error al verificar permisos de administrador:", err.response || err);
+        navigate("/home"); // Redirige si hay un error
+      }
+    };
+
+    checkAdmin();
+  }, [navigate]);
+
+  if (!isAdmin) {
+    return null; // No renderiza nada mientras verifica el rol
+  }
 
   return (
     <div className="main-container">
@@ -292,9 +323,8 @@ function Personal() {
           />
           <div className="botones-mapa">
             <button
-              className={`controlador-imagen ${
-                activeButton === "PlantaBaja" ? "active" : ""
-              }`}
+              className={`controlador-imagen ${activeButton === "PlantaBaja" ? "active" : ""
+                }`}
               onClick={() => {
                 setActiveButton("PlantaBaja");
                 setSelectedImage(Plano_P1);
@@ -303,9 +333,8 @@ function Personal() {
               Planta Baja
             </button>
             <button
-              className={`controlador-imagen ${
-                activeButton === "Laboratorio" ? "active" : ""
-              }`}
+              className={`controlador-imagen ${activeButton === "Laboratorio" ? "active" : ""
+                }`}
               onClick={() => {
                 setActiveButton("Laboratorio");
                 setSelectedImage(Plano_P0);
