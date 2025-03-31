@@ -3,13 +3,18 @@ import { useDevice } from "../../context/DeviceContext";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import {
+  getDeviceHistoricRequest,
+  createHistoricRequest,
+} from "../../api/historic";
 import "./DeviceInfo.css";
 
 function DeviceInfo() {
   const { deviceId, deviceType } = useParams();
   const [deviceData, setDeviceData] = useState(null);
+  const [deviceHistoric, setDeviceHistoric] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false); // Controla si el formulario de edición está abierto
-  const [isModalOpen, setIsModalOpen] = useState(false); // Controla si el modal del informe está abierto
+  const [isModalOpen, setIsModalOpen] = useState(false); // Controla si el modal del histórico está abierto
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -19,6 +24,13 @@ function DeviceInfo() {
     setValue,
     reset,
     formState: { errors },
+  } = useForm();
+
+  const {
+    register: registerHistoric,
+    handleSubmit: handleSubmitHistoric,
+    formState: { errors: errorsHistoric },
+    reset: resetHistoric,
   } = useForm();
 
   const {
@@ -32,8 +44,14 @@ function DeviceInfo() {
     const fetchData = async () => {
       try {
         setDeviceData(null);
+        setDeviceHistoric([]);
 
-        const device = await getOneDevice(deviceType, deviceId);
+        const [historic, device] = await Promise.all([
+          getDeviceHistoricRequest(deviceId),
+          getOneDevice(deviceType, deviceId),
+        ]);
+
+        setDeviceHistoric(historic.data.data);
         setDeviceData(device);
 
         device.deviceFields.forEach((field) => {
@@ -91,9 +109,33 @@ function DeviceInfo() {
     navigate("/home", { replace: true });
   };
 
-  const handleGenerateReport = () => {
-    // Aquí puedes implementar la lógica para generar el informe
-    alert("Generando informe...");
+  const onSubmitHistoric = handleSubmitHistoric(async (data) => {
+    const { Observacion, Tipo, UsuarioAsignado } = data;
+    const historic = {
+      IdEquipo: deviceId,
+      Observaciones: Observacion,
+      Creador: user.userName,
+      Tipo,
+      UsuarioAsignado,
+    };
+    try {
+      await createHistoricRequest(historic);
+      alert("¡Historial creado con éxito!");
+      setIsModalOpen(false);
+      // Actualizar el historial después de agregar
+      const result = await getDeviceHistoricRequest(deviceId);
+      setDeviceHistoric(result.data.data);
+    } finally {
+      resetHistoric();
+    }
+  });
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getUTCDate().toString().padStart(2, "0");
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
   };
 
   if (!deviceData) return <div>Loading...</div>;
@@ -137,19 +179,19 @@ function DeviceInfo() {
                 ))}
             </div>
           </div>
-          <div className="form-buttons">
-            <button className="cancel-button" onClick={handleNavigateHome}>
+          <div className="form-buttons-ver">
+            <button className="cancel-button-ver" onClick={handleNavigateHome}>
               Volver al menú
             </button>
             {user.role === "Admin" && (
               <>
                 <button
-                  className="submit-button"
+                  className="submit-button-ver"
                   onClick={() => setIsEditMode(true)}
                 >
                   Actualizar
                 </button>
-                <button className="delete-button" onClick={handleDelete}>
+                <button className="delete-button-ver" onClick={handleDelete}>
                   Eliminar
                 </button>
               </>
@@ -224,7 +266,7 @@ function DeviceInfo() {
                 ))}
             </div>
           </div>
-          <div className="form-buttons">
+          <div className="form-buttons-ver">
             <button
               type="button"
               className="cancel-button"
@@ -239,11 +281,82 @@ function DeviceInfo() {
         </form>
       )}
 
-      {/* Botón para generar informe */}
-      <div className="form-buttons">
-        <button className="report-button" onClick={handleGenerateReport}>
-          Generar Informe
-        </button>
+      {/* Botón para añadir registro al histórico */}
+      <button className="modal-button" onClick={() => setIsModalOpen(true)}>
+        Añadir registro al histórico
+      </button>
+
+      {isModalOpen && (
+        <div className="modal">
+          <form onSubmit={onSubmitHistoric}>
+            <label className="label-historico">
+              Observación
+              <input
+                className={`input-historico ${
+                  errorsHistoric.Observacion ? "error" : ""
+                }`}
+                {...registerHistoric("Observacion", { required: true })}
+              />
+            </label>
+            <label className="label-historico">
+              Usuario asignado
+              <input
+                className={`input-historico ${
+                  errorsHistoric.UsuarioAsignado ? "error" : ""
+                }`}
+                {...registerHistoric("UsuarioAsignado")}
+              />
+            </label>
+            <label className="label-historico">
+              Tipo
+              <select className="input-historico" {...registerHistoric("Tipo")}>
+                <option value="Incidencia">Incidencia</option>
+                <option value="Asignación">Asignación</option>
+                <option value="Actualización">Actualización</option>
+              </select>
+            </label>
+            <button
+              className="cerrar-historico"
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+            >
+              Cerrar
+            </button>
+            <button className="add-historico" type="submit">
+              Añadir
+            </button>
+          </form>
+        </div>
+      )}
+
+      {/* Tabla de registros históricos */}
+      <div className="historical-records">
+        {deviceHistoric.length > 0 ? (
+          <table className="table-dispositivos">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Observaciones</th>
+                <th>Creador</th>
+                <th>Usuario</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {deviceHistoric.map((historic) => (
+                <tr key={`${historic.Id}-${historic.Fecha}`}>
+                  <td>{formatDate(historic.Fecha)}</td>
+                  <td>{historic?.Observaciones}</td>
+                  <td>{historic.Creador}</td>
+                  <td>{historic?.UsuarioAsignado}</td>
+                  <td>{historic.Tipo}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="no-data">No hay datos disponibles</p>
+        )}
       </div>
     </div>
   );
