@@ -163,16 +163,19 @@
 
 
 
-.modal {
+.modal-personal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    top: 200px;
+    left: 600px;
+    width: 20%;
+    height: 40%;
+    border: 2px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 

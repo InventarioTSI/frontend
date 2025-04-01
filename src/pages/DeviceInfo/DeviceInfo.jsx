@@ -13,6 +13,13 @@ function DeviceInfo() {
   const { deviceId, deviceType } = useParams();
   const [deviceData, setDeviceData] = useState(null);
   const [deviceHistoric, setDeviceHistoric] = useState([]);
+  const [employees, setEmployees] = useState([]); // Lista de empleados para el desplegable
+  const [stateTypes, setStateTypes] = useState([
+    "Activo",
+    "Inactivo",
+    "En reparación",
+    "Retirado",
+  ]); // Tipos de estado
   const [isEditMode, setIsEditMode] = useState(false); // Controla si el formulario de edición está abierto
   const [isModalOpen, setIsModalOpen] = useState(false); // Controla si el modal del histórico está abierto
   const navigate = useNavigate();
@@ -38,6 +45,7 @@ function DeviceInfo() {
     updateDevice,
     deleteDevice,
     errors: responseErrors,
+    getAllDevices, // Método para obtener la lista de dispositivos (empleados)
   } = useDevice();
 
   useEffect(() => {
@@ -46,13 +54,15 @@ function DeviceInfo() {
         setDeviceData(null);
         setDeviceHistoric([]);
 
-        const [historic, device] = await Promise.all([
+        const [historic, device, devicesList] = await Promise.all([
           getDeviceHistoricRequest(deviceId),
           getOneDevice(deviceType, deviceId),
+          getAllDevices(1, 10, "", "", ""), // Obtener lista de empleados
         ]);
 
         setDeviceHistoric(historic.data.data);
         setDeviceData(device);
+        setEmployees(devicesList.employees); // Guardar lista de empleados
 
         device.deviceFields.forEach((field) => {
           setValue(field.name, field.value);
@@ -80,11 +90,47 @@ function DeviceInfo() {
           return obj;
         }, {});
 
+      // Detectar qué campos han cambiado
+      const changedFields = Object.keys(relevantData).filter((key) => {
+        const originalField = deviceData.deviceFields.find(
+          (field) => field.name === key
+        );
+        return originalField && originalField.value !== relevantData[key];
+      });
+
+      // Actualizar el dispositivo
       await updateDevice(deviceType, deviceId, relevantData);
       alert("¡Dispositivo actualizado con éxito!");
       setIsEditMode(false); // Cierra el formulario de edición
+
+      // Crear un registro histórico para cada campo cambiado
+      for (const field of changedFields) {
+        let tipo = "Actualización normal";
+        if (field === "PuestosTrabajo") {
+          tipo = "Actualización de puesto";
+        } else if (field === "Estado") {
+          tipo = "Actualización de estado";
+        }
+
+        const historic = {
+          IdEquipo: deviceId,
+          Observaciones: `Se actualizó el campo ${field} a "${relevantData[field]}"`,
+          Creador: user.userName,
+          Tipo: tipo,
+          UsuarioAsignado:
+            field === "PuestosTrabajo" ? relevantData[field] : null,
+        };
+
+        await createHistoricRequest(historic);
+      }
+
+      // Actualizar los datos del dispositivo
       const updatedDevice = await getOneDevice(deviceType, deviceId);
       setDeviceData(updatedDevice);
+
+      // Actualizar los registros históricos
+      const updatedHistoric = await getDeviceHistoricRequest(deviceId);
+      setDeviceHistoric(updatedHistoric.data.data); // Actualiza el estado con los nuevos registros
     } catch (error) {
       console.error("Error updating device:", error);
     }
@@ -122,9 +168,10 @@ function DeviceInfo() {
       await createHistoricRequest(historic);
       alert("¡Historial creado con éxito!");
       setIsModalOpen(false);
-      // Actualizar el historial después de agregar
-      const result = await getDeviceHistoricRequest(deviceId);
-      setDeviceHistoric(result.data.data);
+
+      // Actualizar los registros históricos después de añadir
+      const updatedHistoric = await getDeviceHistoricRequest(deviceId);
+      setDeviceHistoric(updatedHistoric.data.data); // Actualiza el estado con los nuevos registros
     } finally {
       resetHistoric();
     }
@@ -136,6 +183,11 @@ function DeviceInfo() {
     const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
     const year = date.getUTCFullYear();
     return `${day}/${month}/${year}`;
+  };
+
+  const getEmployeeName = (puesto) => {
+    const employee = employees.find((emp) => emp.Puesto === puesto);
+    return employee ? `${employee.Puesto} - ${employee.Empleado}` : puesto;
   };
 
   if (!deviceData) return <div>Loading...</div>;
@@ -164,7 +216,11 @@ function DeviceInfo() {
                 .map((field) => (
                   <div key={field.name} className="row">
                     <div className="cell">{field.name}</div>
-                    <div className="cell">{field.value || "N/A"}</div>
+                    <div className="cell">
+                      {field.name === "PuestosTrabajo"
+                        ? getEmployeeName(field.value)
+                        : field.value || "N/A"}
+                    </div>
                   </div>
                 ))}
             </div>
@@ -174,7 +230,11 @@ function DeviceInfo() {
                 .map((field) => (
                   <div key={field.name} className="row">
                     <div className="cell">{field.name}</div>
-                    <div className="cell">{field.value || "N/A"}</div>
+                    <div className="cell">
+                      {field.name === "PuestosTrabajo"
+                        ? getEmployeeName(field.value)
+                        : field.value || "N/A"}
+                    </div>
                   </div>
                 ))}
             </div>
@@ -221,15 +281,48 @@ function DeviceInfo() {
                       </label>
                     </div>
                     <div className="cell">
-                      <input
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
-                        type="text"
-                        name={field.name}
-                        defaultValue={field.value}
-                        {...register(field.name)}
-                      />
+                      {field.name === "PuestosTrabajo" ? (
+                        <select
+                          className={`form-input ${
+                            errors[field.name] ? "error" : ""
+                          }`}
+                          name={field.name}
+                          {...register(field.name)}
+                        >
+                          {employees.map((employee) => (
+                            <option
+                              key={employee.Puesto}
+                              value={employee.Puesto}
+                            >
+                              {employee.Puesto} - {employee.Empleado}
+                            </option>
+                          ))}
+                        </select>
+                      ) : field.name === "Estado" ? (
+                        <select
+                          className={`form-input ${
+                            errors[field.name] ? "error" : ""
+                          }`}
+                          name={field.name}
+                          {...register(field.name)}
+                        >
+                          {stateTypes.map((state) => (
+                            <option key={state} value={state}>
+                              {state}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          className={`form-input ${
+                            errors[field.name] ? "error" : ""
+                          }`}
+                          type="text"
+                          name={field.name}
+                          defaultValue={field.value}
+                          {...register(field.name)}
+                        />
+                      )}
                     </div>
                   </div>
                 ))}
@@ -252,15 +345,48 @@ function DeviceInfo() {
                       </label>
                     </div>
                     <div className="cell">
-                      <input
-                        className={`form-input ${
-                          errors[field.name] ? "error" : ""
-                        }`}
-                        type="text"
-                        name={field.name}
-                        defaultValue={field.value}
-                        {...register(field.name)}
-                      />
+                      {field.name === "PuestosTrabajo" ? (
+                        <select
+                          className={`form-input ${
+                            errors[field.name] ? "error" : ""
+                          }`}
+                          name={field.name}
+                          {...register(field.name)}
+                        >
+                          {employees.map((employee) => (
+                            <option
+                              key={employee.Puesto}
+                              value={employee.Puesto}
+                            >
+                              {employee.Puesto} - {employee.Empleado}
+                            </option>
+                          ))}
+                        </select>
+                      ) : field.name === "Estado" ? (
+                        <select
+                          className={`form-input ${
+                            errors[field.name] ? "error" : ""
+                          }`}
+                          name={field.name}
+                          {...register(field.name)}
+                        >
+                          {stateTypes.map((state) => (
+                            <option key={state} value={state}>
+                              {state}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <input
+                          className={`form-input ${
+                            errors[field.name] ? "error" : ""
+                          }`}
+                          type="text"
+                          name={field.name}
+                          defaultValue={field.value}
+                          {...register(field.name)}
+                        />
+                      )}
                     </div>
                   </div>
                 ))}
@@ -287,45 +413,52 @@ function DeviceInfo() {
       </button>
 
       {isModalOpen && (
-        <div className="modal">
-          <form onSubmit={onSubmitHistoric}>
-            <label className="label-historico">
-              Observación
-              <input
-                className={`input-historico ${
-                  errorsHistoric.Observacion ? "error" : ""
-                }`}
-                {...registerHistoric("Observacion", { required: true })}
-              />
-            </label>
-            <label className="label-historico">
-              Usuario asignado
-              <input
-                className={`input-historico ${
-                  errorsHistoric.UsuarioAsignado ? "error" : ""
-                }`}
-                {...registerHistoric("UsuarioAsignado")}
-              />
-            </label>
-            <label className="label-historico">
-              Tipo
-              <select className="input-historico" {...registerHistoric("Tipo")}>
-                <option value="Incidencia">Incidencia</option>
-                <option value="Asignación">Asignación</option>
-                <option value="Actualización">Actualización</option>
-              </select>
-            </label>
-            <button
-              className="cerrar-historico"
-              type="button"
-              onClick={() => setIsModalOpen(false)}
-            >
-              Cerrar
-            </button>
-            <button className="add-historico" type="submit">
-              Añadir
-            </button>
-          </form>
+        <div className="div-modal">
+          <div className="modal-registro">
+            <form onSubmit={onSubmitHistoric}>
+              <label className="label-historico">
+                Observación
+                <input
+                  className={`input-historico ${
+                    errorsHistoric.Observacion ? "error" : ""
+                  }`}
+                  {...registerHistoric("Observacion", { required: true })}
+                />
+              </label>
+              <label className="label-historico">
+                Usuario asignado
+                <input
+                  className={`input-historico ${
+                    errorsHistoric.UsuarioAsignado ? "error" : ""
+                  }`}
+                  {...registerHistoric("UsuarioAsignado")}
+                />
+              </label>
+              <label className="label-historico">
+                Tipo
+                <select
+                  className="input-historico"
+                  {...registerHistoric("Tipo")}
+                >
+                  <option value="Incidencia">Incidencia</option>
+                  <option value="Asignación">Asignación</option>
+                  <option value="Actualización">Actualización</option>
+                </select>
+              </label>
+              <div className="div-botones-historico">
+                <button
+                  className="cerrar-historico"
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cerrar
+                </button>
+                <button className="add-historico" type="submit">
+                  Añadir
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
@@ -348,7 +481,11 @@ function DeviceInfo() {
                   <td>{formatDate(historic.Fecha)}</td>
                   <td>{historic?.Observaciones}</td>
                   <td>{historic.Creador}</td>
-                  <td>{historic?.UsuarioAsignado}</td>
+                  <td>
+                    {historic?.UsuarioAsignado
+                      ? getEmployeeName(historic.UsuarioAsignado)
+                      : "N/A"}
+                  </td>
                   <td>{historic.Tipo}</td>
                 </tr>
               ))}
