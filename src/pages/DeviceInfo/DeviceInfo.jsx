@@ -98,31 +98,33 @@ function DeviceInfo() {
         return originalField && originalField.value !== relevantData[key];
       });
 
+      // Si no hay cambios, no hacer nada
+      if (changedFields.length === 0) {
+        alert("No se realizaron cambios.");
+        return;
+      }
+
       // Actualizar el dispositivo
       await updateDevice(deviceType, deviceId, relevantData);
       alert("¡Dispositivo actualizado con éxito!");
       setIsEditMode(false); // Cierra el formulario de edición
 
-      // Crear un registro histórico para cada campo cambiado
-      for (const field of changedFields) {
-        let tipo = "Actualización normal";
-        if (field === "PuestosTrabajo") {
-          tipo = "Actualización de puesto";
-        } else if (field === "Estado") {
-          tipo = "Actualización de estado";
-        }
+      // Crear un único registro histórico consolidado
+      const observaciones = changedFields
+        .map(
+          (field) => `Se actualizó el campo ${field} a "${relevantData[field]}"`
+        )
+        .join("; ");
 
-        const historic = {
-          IdEquipo: deviceId,
-          Observaciones: `Se actualizó el campo ${field} a "${relevantData[field]}"`,
-          Creador: user.userName,
-          Tipo: tipo,
-          UsuarioAsignado:
-            field === "PuestosTrabajo" ? relevantData[field] : null,
-        };
+      const historic = {
+        IdEquipo: deviceId,
+        Observaciones: observaciones,
+        Creador: user.userName,
+        Tipo: "Actualización de campos",
+        UsuarioAsignado: relevantData["PuestosTrabajo"] || null,
+      };
 
-        await createHistoricRequest(historic);
-      }
+      await createHistoricRequest(historic);
 
       // Actualizar los datos del dispositivo
       const updatedDevice = await getOneDevice(deviceType, deviceId);
@@ -133,6 +135,7 @@ function DeviceInfo() {
       setDeviceHistoric(updatedHistoric.data.data); // Actualiza el estado con los nuevos registros
     } catch (error) {
       console.error("Error updating device:", error);
+      alert("Hubo un problema al actualizar el dispositivo.");
     }
   });
 
