@@ -167,11 +167,14 @@ function Personal() {
     const checkAdmin = async () => {
       try {
         const token = localStorage.getItem("token"); // Obtén el token del localStorage
-        const response = await axios.get("http://localhost:3000/api/users/auth/check-admin", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Incluye el token en los encabezados
-          },
-        });
+        const response = await axios.get(
+          "http://localhost:3000/api/users/auth/check-admin",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Incluye el token en los encabezados
+            },
+          }
+        );
 
         if (!response.data.isAdmin) {
           navigate("/home"); // Redirige si no es administrador
@@ -179,7 +182,10 @@ function Personal() {
           setIsAdmin(true); // Actualiza el estado si es administrador
         }
       } catch (err) {
-        console.error("Error al verificar permisos de administrador:", err.response || err);
+        console.error(
+          "Error al verificar permisos de administrador:",
+          err.response || err
+        );
         navigate("/home"); // Redirige si hay un error
       }
     };
@@ -261,7 +267,7 @@ function Personal() {
               Añadir nuevo puesto
             </button>
             {showModal && (
-              <div className="modal">
+              <div className="modal-personal">
                 <div className="modal-content">
                   <h2 className="modal-h2">Añadir nuevo puesto</h2>
                   <input
@@ -323,8 +329,9 @@ function Personal() {
           />
           <div className="botones-mapa">
             <button
-              className={`controlador-imagen ${activeButton === "PlantaBaja" ? "active" : ""
-                }`}
+              className={`controlador-imagen ${
+                activeButton === "PlantaBaja" ? "active" : ""
+              }`}
               onClick={() => {
                 setActiveButton("PlantaBaja");
                 setSelectedImage(Plano_P1);
@@ -333,8 +340,9 @@ function Personal() {
               Planta Baja
             </button>
             <button
-              className={`controlador-imagen ${activeButton === "Laboratorio" ? "active" : ""
-                }`}
+              className={`controlador-imagen ${
+                activeButton === "Laboratorio" ? "active" : ""
+              }`}
               onClick={() => {
                 setActiveButton("Laboratorio");
                 setSelectedImage(Plano_P0);
