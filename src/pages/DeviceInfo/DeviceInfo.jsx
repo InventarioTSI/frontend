@@ -13,15 +13,15 @@ function DeviceInfo() {
   const { deviceId, deviceType } = useParams();
   const [deviceData, setDeviceData] = useState(null);
   const [deviceHistoric, setDeviceHistoric] = useState([]);
-  const [employees, setEmployees] = useState([]); // Lista de empleados para el desplegable
+  const [employees, setEmployees] = useState([]);
   const [stateTypes, setStateTypes] = useState([
     "Activo",
     "Inactivo",
     "En reparación",
     "Retirado",
-  ]); // Tipos de estado
-  const [isEditMode, setIsEditMode] = useState(false); // Controla si el formulario de edición está abierto
-  const [isModalOpen, setIsModalOpen] = useState(false); // Controla si el modal del histórico está abierto
+  ]);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -45,7 +45,7 @@ function DeviceInfo() {
     updateDevice,
     deleteDevice,
     errors: responseErrors,
-    getAllDevices, // Método para obtener la lista de dispositivos (empleados)
+    getAllDevices,
   } = useDevice();
 
   useEffect(() => {
@@ -57,12 +57,12 @@ function DeviceInfo() {
         const [historic, device, devicesList] = await Promise.all([
           getDeviceHistoricRequest(deviceId),
           getOneDevice(deviceType, deviceId),
-          getAllDevices(1, 10, "", "", ""), // Obtener lista de empleados
+          getAllDevices(1, 10, "", "", ""),
         ]);
 
         setDeviceHistoric(historic.data.data);
         setDeviceData(device);
-        setEmployees(devicesList.employees); // Guardar lista de empleados
+        setEmployees(devicesList.employees);
 
         device.deviceFields.forEach((field) => {
           setValue(field.name, field.value);
@@ -81,6 +81,7 @@ function DeviceInfo() {
 
   const handleUpdate = handleSubmit(async (data) => {
     try {
+      // Obtener solo los campos relevantes del formulario
       const relevantData = Object.keys(data)
         .filter((key) =>
           deviceData.deviceFields.some((field) => field.name === key)
@@ -90,49 +91,57 @@ function DeviceInfo() {
           return obj;
         }, {});
 
-      // Detectar qué campos han cambiado
-      const changedFields = Object.keys(relevantData).filter((key) => {
-        const originalField = deviceData.deviceFields.find(
-          (field) => field.name === key
-        );
-        return originalField && originalField.value !== relevantData[key];
-      });
+      // Detectar qué campos han cambiado realmente
+      const changedFields = deviceData.deviceFields
+        .filter((field) => {
+          return (
+            relevantData[field.name] !== undefined &&
+            relevantData[field.name] !== field.value
+          );
+        })
+        .map((field) => field.name);
 
       // Si no hay cambios, no hacer nada
       if (changedFields.length === 0) {
         alert("No se realizaron cambios.");
+        setIsEditMode(false);
         return;
       }
 
-      // Actualizar el dispositivo
+      // Actualizar el dispositivo primero
       await updateDevice(deviceType, deviceId, relevantData);
-      alert("¡Dispositivo actualizado con éxito!");
-      setIsEditMode(false); // Cierra el formulario de edición
 
-      // Crear un único registro histórico consolidado
+      // Crear un único registro histórico detallado
       const observaciones = changedFields
-        .map(
-          (field) => `Se actualizó el campo ${field} a "${relevantData[field]}"`
-        )
-        .join("; ");
+        .map((field) => {
+          const oldValue = deviceData.deviceFields.find(
+            (f) => f.name === field
+          ).value;
+          const newValue = relevantData[field];
+          return `Campo "${field}" modificado: de "${oldValue}" a "${newValue}"`;
+        })
+        .join(" | ");
 
       const historic = {
         IdEquipo: deviceId,
         Observaciones: observaciones,
         Creador: user.userName,
-        Tipo: "Actualización de campos",
+        Tipo: "Modificación",
         UsuarioAsignado: relevantData["PuestosTrabajo"] || null,
       };
 
       await createHistoricRequest(historic);
 
-      // Actualizar los datos del dispositivo
+      // Actualizar los datos en la vista
       const updatedDevice = await getOneDevice(deviceType, deviceId);
       setDeviceData(updatedDevice);
 
-      // Actualizar los registros históricos
       const updatedHistoric = await getDeviceHistoricRequest(deviceId);
-      setDeviceHistoric(updatedHistoric.data.data); // Actualiza el estado con los nuevos registros
+      setDeviceHistoric(updatedHistoric.data.data);
+
+      // Mostrar alerta y salir del modo edición
+      alert("¡Los cambios se han guardado con éxito!");
+      setIsEditMode(false);
     } catch (error) {
       console.error("Error updating device:", error);
       alert("Hubo un problema al actualizar el dispositivo.");
@@ -172,9 +181,8 @@ function DeviceInfo() {
       alert("¡Historial creado con éxito!");
       setIsModalOpen(false);
 
-      // Actualizar los registros históricos después de añadir
       const updatedHistoric = await getDeviceHistoricRequest(deviceId);
-      setDeviceHistoric(updatedHistoric.data.data); // Actualiza el estado con los nuevos registros
+      setDeviceHistoric(updatedHistoric.data.data);
     } finally {
       resetHistoric();
     }
@@ -209,7 +217,6 @@ function DeviceInfo() {
       <div className="titulo-device">Tipo de Dispositivo: {deviceType}</div>
 
       {!isEditMode ? (
-        // Vista de solo lectura
         <div className="view-mode">
           <h1>Detalles del dispositivo</h1>
           <div className="device-details-table">
@@ -262,7 +269,6 @@ function DeviceInfo() {
           </div>
         </div>
       ) : (
-        // Formulario de edición
         <form onSubmit={handleUpdate} className="form">
           <h1>Editar dispositivo</h1>
           <div className="form-fields">
@@ -410,7 +416,6 @@ function DeviceInfo() {
         </form>
       )}
 
-      {/* Botón para añadir registro al histórico */}
       <button className="modal-button" onClick={() => setIsModalOpen(true)}>
         Añadir registro al histórico
       </button>
@@ -445,7 +450,7 @@ function DeviceInfo() {
                 >
                   <option value="Incidencia">Incidencia</option>
                   <option value="Asignación">Asignación</option>
-                  <option value="Actualización">Actualización</option>
+                  <option value="Modificación">Modificación</option>
                 </select>
               </label>
               <div className="div-botones-historico">
@@ -454,7 +459,7 @@ function DeviceInfo() {
                   type="button"
                   onClick={() => setIsModalOpen(false)}
                 >
-                  Cerrar
+                  Cerraractua
                 </button>
                 <button className="add-historico" type="submit">
                   Añadir
@@ -465,7 +470,6 @@ function DeviceInfo() {
         </div>
       )}
 
-      {/* Tabla de registros históricos */}
       <div className="historical-records">
         {deviceHistoric.length > 0 ? (
           <table className="table-dispositivos">
